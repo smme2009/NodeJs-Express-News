@@ -8,7 +8,6 @@ const app = express();
 
 // 初始化env
 env.config();
-env.config({ path: `.env.${process.env.NODE_ENV}` });
 
 // 初始化資料庫
 const sequelize: Sequelize = new Sequelize(
