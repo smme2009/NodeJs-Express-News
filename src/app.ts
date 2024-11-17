@@ -12,11 +12,11 @@ env.config();
 
 // 初始化資料庫
 const sequelize: Sequelize = new Sequelize(
-    process.env.DB_DATABASE ?? "",
-    process.env.DB_USERNAME ?? "",
-    process.env.DB_PASSWORD ?? "",
+    process.env.DB_DATABASE!,
+    process.env.DB_USERNAME!,
+    process.env.DB_PASSWORD!,
     {
-        host: process.env.DB_HOST ?? "",
+        host: process.env.DB_HOST!,
         dialect: "mysql",
     }
 );
