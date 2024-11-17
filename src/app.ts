@@ -1,4 +1,5 @@
 import express from "express";
+import BodyParser from "body-parser";
 import env from "dotenv";
 import router from "@/router/index";
 import { Sequelize } from "sequelize-typescript";
@@ -22,6 +23,13 @@ const sequelize: Sequelize = new Sequelize(
 
 // 加入Model
 sequelize.addModels([__dirname + "/database/model"]);
+
+// 接收Body參數設定
+app.use(
+    BodyParser.urlencoded({
+        extended: true,
+    })
+);
 
 // 加入路由
 app.use(router);
