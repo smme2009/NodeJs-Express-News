@@ -15,7 +15,7 @@ module.exports = {
 					primaryKey: true,
 					autoIncrement: true,
 					allowNull: false,
-					comment: '會員ID'
+					comment: '管理者ID'
 				},
 				account: {
 					type: Sequelize.STRING,
