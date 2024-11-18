@@ -24,7 +24,9 @@ export default class Admin {
         password: string
     ): Promise<null | TypeAdmin> {
         // 透過帳號取得資料
-        const model: null | ModelAdmin = await this.repoAdmin.get(account);
+        const model: null | ModelAdmin = await this.repoAdmin.getWithAccount(
+            account
+        );
 
         if (model === null) {
             return null;
