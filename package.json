@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config -r tsconfig-paths/register src/app.ts",
+    "start": "nodemon -r tsconfig-paths/register --files src/app.ts",
     "build": "tsc && tsc-alias",
     "watch": "tsc --watch"
   },
