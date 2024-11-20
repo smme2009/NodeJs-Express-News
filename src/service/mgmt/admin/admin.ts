@@ -43,6 +43,26 @@ export default class Admin {
     }
 
     /**
+     * 取得帳號資訊
+     *
+     * @param {number} adminId
+     *
+     * @returns {Promise<null | TypeAdmin>} 帳號資訊
+     */
+    public async getInfo(adminId: number): Promise<null | TypeAdmin> {
+        // 透過ID取得資料
+        const model: null | ModelAdmin = await this.repoAdmin.getWithId(
+            adminId
+        );
+
+        if (model === null) {
+            return null;
+        }
+
+        return this.setData(model);
+    }
+
+    /**
      * 設定資料
      *
      * @param {ModelAdmin} model Model

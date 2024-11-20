@@ -1,7 +1,7 @@
 import express from "express";
 import BodyParser from "body-parser";
 import env from "dotenv";
-import router from "@/router/index";
+import RtMgmt from "@/router/mgmt/index";
 import { Sequelize } from "sequelize-typescript";
 
 // 初始化框架
@@ -32,7 +32,7 @@ app.use(
 );
 
 // 加入路由
-app.use(router);
+app.use(RtMgmt);
 
 // 開始監聽
 app.listen(process.env.APP_PORT);

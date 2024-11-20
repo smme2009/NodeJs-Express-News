@@ -20,15 +20,13 @@ export default class Admin {
      * @param {Request} eRequrest 框架Request
      * @param {Response} eResponse 框架Response
      *
-     * @returns {Response}
+     * @returns {Promise<void>}
      */
-    public async login(
-        eRequrest: Request,
-        eResponse: Response
-    ): Promise<Response> {
+    public async login(eRequrest: Request, eResponse: Response): Promise<void> {
         const account: string = eRequrest.body.account;
         const password: string = eRequrest.body.password;
 
+        // 登入
         const data: null | TypeAdmin = await this.srcAdmin.login(
             account,
             password
@@ -39,7 +37,8 @@ export default class Admin {
                 message: "登入失敗",
             };
 
-            return eResponse.status(401).json(json);
+            eResponse.status(401).json(json);
+            return;
         }
 
         const json: TypeResponse = {
@@ -49,6 +48,42 @@ export default class Admin {
             },
         };
 
-        return eResponse.status(200).json(json);
+        eResponse.status(200).json(json);
+        return;
+    }
+
+    /**
+     * 取得帳號資訊
+     *
+     * @param {Request} eRequrest 框架Request
+     * @param {Response} eResponse 框架Response
+     *
+     * @returns {Promise<void>}
+     */
+    public async getInfo(
+        eRequrest: Request,
+        eResponse: Response
+    ): Promise<void> {
+        const adminId: number = eRequrest.adminId!;
+
+        // 取得帳號資訊
+        const data: null | TypeAdmin = await this.srcAdmin.getInfo(adminId);
+
+        if (data === null) {
+            const json: TypeResponse = {
+                message: "取得帳號資訊失敗",
+            };
+
+            eResponse.status(400).json(json);
+            return;
+        }
+
+        const json: TypeResponse = {
+            message: "成功取得帳號資訊",
+            data: data,
+        };
+
+        eResponse.status(200).json(json);
+        return;
     }
 }

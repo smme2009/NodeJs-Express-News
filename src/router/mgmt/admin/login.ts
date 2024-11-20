@@ -4,9 +4,8 @@ import CtrlAdmin from "@/controller/mgmt/admin/admin";
 const router: Router = Router();
 
 // 登入
-router.post("/login", async (eRequest: Request, eResponse: Response) => {
-    const ctrlAdmin: CtrlAdmin = new CtrlAdmin();
-    await ctrlAdmin.login(eRequest, eResponse);
+router.post("/login", (eRequest: Request, eResponse: Response) => {
+    new CtrlAdmin().login(eRequest, eResponse);
 });
 
 export default router;

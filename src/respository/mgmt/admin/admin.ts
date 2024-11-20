@@ -19,4 +19,22 @@ export default class Admin {
 
         return model;
     }
+
+    /**
+     * 取得管理者(ID)
+     *
+     * @param {number} adminId 管理者ID
+     *
+     * @returns {Promise<null | ModelAdmin>} 管理者
+     */
+    public async getWithId(adminId: number): Promise<null | ModelAdmin> {
+        const model: null | ModelAdmin = await ModelAdmin.findOne({
+            where: {
+                status: true,
+                adminId: adminId,
+            },
+        });
+
+        return model;
+    }
 }
