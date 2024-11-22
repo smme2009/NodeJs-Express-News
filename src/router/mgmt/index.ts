@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import MwAccount from "@/middleware/account";
 import RtLogin from "@/router/mgmt/admin/login";
 import RtAdmin from "@/router/mgmt/admin/admin";
+import RtNews from "@/router/mgmt/news/type";
 
 const router: Router = Router();
 const url: string = "/api/mgmt";
@@ -20,5 +21,8 @@ router.use(
 
 // 管理者
 router.use(url, RtAdmin);
+
+// 新聞類型
+router.use(url, RtNews);
 
 export default router;
