@@ -1,19 +1,15 @@
-import {
-    Table,
-    Model,
-    Column,
-    DataType,
-    CreatedAt,
-    UpdatedAt,
-    DeletedAt,
-} from "sequelize-typescript";
+import { Table, Model, Column, DataType } from "sequelize-typescript";
 
 // 管理者
 @Table({
     tableName: "admin",
+    timestamps: true,
     paranoid: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
 })
-export default class Admin extends Model<Admin> {
+export default class Admin extends Model {
     @Column({
         field: "admin_id",
         type: DataType.BIGINT.UNSIGNED,
@@ -56,31 +52,4 @@ export default class Admin extends Model<Admin> {
         comment: "狀態",
     })
     status!: number;
-
-    @CreatedAt
-    @Column({
-        field: "created_at",
-        type: DataType.DATE,
-        allowNull: false,
-        comment: "新增時間",
-    })
-    createdAt!: Date;
-
-    @UpdatedAt
-    @Column({
-        field: "updated_at",
-        type: DataType.DATE,
-        allowNull: false,
-        comment: "更新時間",
-    })
-    updatedAt!: Date;
-
-    @DeletedAt
-    @Column({
-        field: "deleted_at",
-        type: DataType.DATE,
-        allowNull: true,
-        comment: "刪除時間",
-    })
-    deletedAt!: Date;
 }
