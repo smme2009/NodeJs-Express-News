@@ -52,18 +52,30 @@ export default class Type {
      * @returns {Promise<null | ModelNewsType>} Model
      */
     public async insert(data: TypeNewsType): Promise<null | ModelNewsType> {
-        let model: null | ModelNewsType = null;
+        const model: null | ModelNewsType = ModelNewsType.build();
 
-        try {
-            model = await ModelNewsType.create({
-                name: data.name,
-                status: data.status!,
-            });
-        } catch (error: any) {
-            console.error("新增新聞異常");
+        return await this.saveModel(model, data);
+    }
+
+    /**
+     * 更新新聞類型
+     *
+     * @param {number} newsTypeId 新聞類型ID
+     * @param {TypeNewsType} data 資料
+     *
+     * @returns {Promise<null | ModelNewsType>} Model
+     */
+    public async update(
+        newsTypeId: number,
+        data: TypeNewsType
+    ): Promise<null | ModelNewsType> {
+        const model: null | ModelNewsType = await this.getById(newsTypeId);
+
+        if (model === null) {
+            return null;
         }
 
-        return model;
+        return await this.saveModel(model, data);
     }
 
     /**
@@ -84,5 +96,30 @@ export default class Type {
         });
 
         return model;
+    }
+
+    /**
+     * 儲存Model
+     *
+     * @param {ModelNewsType} model Model
+     * @param {TypeNewsType} data 資料
+     *
+     * @returns {null | ModelNewsType} 儲存後的Model
+     */
+    private async saveModel(
+        model: ModelNewsType,
+        data: TypeNewsType
+    ): Promise<null | ModelNewsType> {
+        let resultModel: null | ModelNewsType = null;
+
+        try {
+            model.name = data.name;
+            model.status = data.status!;
+            resultModel = await model.save();
+        } catch (error) {
+            console.log("儲存新聞類型Model失敗");
+        }
+
+        return resultModel;
     }
 }

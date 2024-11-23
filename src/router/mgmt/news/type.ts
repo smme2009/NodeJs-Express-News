@@ -20,4 +20,13 @@ router.post(url, ValNewsType, (eRequest: Request, eResponse: Response) => {
     new CtrlNewsType().insert(eRequest, eResponse);
 });
 
+// 更新新聞類型
+router.put(
+    url + "/:newsTypeId",
+    ValNewsType,
+    (eRequest: Request, eResponse: Response) => {
+        new CtrlNewsType().update(eRequest, eResponse);
+    }
+);
+
 export default router;

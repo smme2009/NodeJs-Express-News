@@ -72,19 +72,53 @@ export default class Type {
     }
 
     /**
+     * 更新新聞類型
+     *
+     * @param {number} newsTypeId 新聞類型ID
+     * @param {TypeNewsType} data 資料
+     *
+     * @returns {Promise<null | TypeNewsType>} 資料
+     */
+    public async update(
+        newsTypeId: number,
+        data: TypeNewsType
+    ): Promise<null | TypeNewsType> {
+        const model: null | ModelNewsType = await this.repoNewsType.update(
+            newsTypeId,
+            data
+        );
+
+        if (model === null) {
+            return null;
+        }
+
+        return this.setData(model);
+    }
+
+    /**
      * 檢查名稱是否可用
      *
      * @param {string} name 名稱
+     * @param {number} newsTypeId 排除的新聞類型ID(更新時使用)
      *
      * @returns {Promise<boolean>} 是否可用
      */
-    public async checkName(name: string): Promise<boolean> {
+    public async checkName(
+        name: string,
+        newsTypeId?: number
+    ): Promise<boolean> {
         const model: null | ModelNewsType =
             await this.repoNewsType.getByNameWithSoft(name);
 
-        const isPass: boolean = model === null ? true : false;
+        if (model === null) {
+            return true;
+        }
 
-        return isPass;
+        if (newsTypeId !== undefined && model.newsTypeId === newsTypeId) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

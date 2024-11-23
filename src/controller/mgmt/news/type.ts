@@ -129,6 +129,69 @@ export default class Admin {
     }
 
     /**
+     * 更新新聞類型
+     *
+     * @param {Request} eRequest 框架Request
+     * @param {Response} eResponse 框架Response
+     *
+     * @returns {Promise<void>}
+     */
+    public async update(eRequest: Request, eResponse: Response): Promise<void> {
+        const newsTypeId: string = eRequest.params.newsTypeId;
+        const request: TypeNewsType = this.getRequest(eRequest);
+        const error: Result = validationResult(eRequest);
+
+        // 欄位驗證錯誤回傳
+        if (error.isEmpty() === false) {
+            const json: TypeResponse = {
+                message: "欄位錯誤",
+                data: error.array(),
+            };
+
+            eResponse.status(400).json(json);
+            return;
+        }
+
+        // 檢查名稱是否可用
+        const isPass: boolean = await this.srcNewsType.checkName(
+            request.name,
+            parseInt(newsTypeId)
+        );
+
+        if (isPass === false) {
+            const json: TypeResponse = {
+                message: "名稱重複",
+            };
+
+            eResponse.status(400).json(json);
+            return;
+        }
+
+        // 更新新聞類型
+        const data: null | TypeNewsType = await this.srcNewsType.update(
+            parseInt(newsTypeId),
+            request
+        );
+
+        if (data === null) {
+            const json: TypeResponse = {
+                message: "更新新聞類型失敗",
+            };
+
+            eResponse.status(400).json(json);
+            return;
+        }
+
+        const json: TypeResponse = {
+            message: "成功更新新聞類型",
+            data: data,
+        };
+
+        eResponse.status(200).json(json);
+        return;
+    }
+
+    /**
      * 取得Request
      *
      * @param {Request} eRequest 框架Request
