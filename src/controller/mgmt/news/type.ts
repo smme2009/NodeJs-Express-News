@@ -13,6 +13,31 @@ export default class Admin {
     }
 
     /**
+     * 取得新聞類型分頁
+     *
+     * @param {Request} eRequrest 框架Request
+     * @param {Response} eResponse 框架Response
+     *
+     * @returns {Promise<void>}
+     */
+    public async getPage(
+        eRequrest: Request,
+        eResponse: Response
+    ): Promise<void> {
+        const pageNumber: number = parseInt(
+            (eRequrest.query.pageNumber as string) ?? 1
+        );
+
+        const json: TypeResponse = {
+            message: "成功取得新聞類型分頁",
+            data: await this.srcNewsType.getPage(pageNumber),
+        };
+
+        eResponse.status(200).json(json);
+        return;
+    }
+
+    /**
      * 新增新聞類型
      *
      * @param {Request} eRequrest 框架Request

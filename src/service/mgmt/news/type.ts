@@ -1,4 +1,6 @@
 import TypeNewsType from "@/type/data/newsType";
+import TypePage from "@/type/data/page";
+import TypeModelPage from "@/type/system/modelPage";
 import RepoNewsType from "@/respository/mgmt/news/type";
 import ModelNewsType from "@/database/model/newsType";
 
@@ -8,6 +10,25 @@ export default class Type {
 
     constructor() {
         this.repoNewsType = new RepoNewsType();
+    }
+
+    /**
+     * 取得新聞類型分頁
+     *
+     * @param {number} pageNumber 頁碼
+     *
+     * @returns {Promise<TypePage<TypeNewsType>>} 分頁資料
+     */
+    public async getPage(pageNumber: number): Promise<TypePage<TypeNewsType>> {
+        const modelPage: TypeModelPage<ModelNewsType> =
+            await this.repoNewsType.getPage(pageNumber);
+
+        const page: TypePage<TypeNewsType> = {
+            total: modelPage.count,
+            data: modelPage.rows.map((item) => this.setData(item)),
+        };
+
+        return page;
     }
 
     /**

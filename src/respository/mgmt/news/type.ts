@@ -1,8 +1,34 @@
 import TypeNewsType from "@/type/data/newsType";
+import TypeModelPage from "@/type/system/modelPage";
 import ModelNewsType from "@/database/model/newsType";
 
 // 新聞類型
 export default class Type {
+    /**
+     * 取得新聞類型分頁
+     *
+     * @param {number} pageNumber 頁碼
+     *
+     * @returns {Promise<TypePage<ModelNewsType>>} 分頁資料
+     */
+    public async getPage(
+        pageNumber: number
+    ): Promise<TypeModelPage<ModelNewsType>> {
+        const pageSize: number = parseInt(process.env.PAGE_SIZE);
+
+        const modelPage: TypeModelPage<ModelNewsType> =
+            await ModelNewsType.findAndCountAll({
+                where: {
+                    status: true,
+                },
+                order: [["newsTypeId", "DESC"]],
+                offset: (pageNumber - 1) * pageSize,
+                limit: pageSize,
+            });
+
+        return modelPage;
+    }
+
     /**
      * 新增新聞類型
      *
