@@ -9,7 +9,7 @@ export default class Admin {
      *
      * @returns {Promise<null | ModelAdmin>} 管理者
      */
-    public async getWithAccount(account: string): Promise<null | ModelAdmin> {
+    public async getByAccount(account: string): Promise<null | ModelAdmin> {
         const model: null | ModelAdmin = await ModelAdmin.findOne({
             where: {
                 status: true,
@@ -27,7 +27,7 @@ export default class Admin {
      *
      * @returns {Promise<null | ModelAdmin>} 管理者
      */
-    public async getWithId(adminId: number): Promise<null | ModelAdmin> {
+    public async getById(adminId: number): Promise<null | ModelAdmin> {
         const model: null | ModelAdmin = await ModelAdmin.findOne({
             where: {
                 status: true,
