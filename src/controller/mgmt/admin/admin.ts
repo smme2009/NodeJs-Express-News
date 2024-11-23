@@ -17,14 +17,14 @@ export default class Admin {
     /**
      * 登入
      *
-     * @param {Request} eRequrest 框架Request
+     * @param {Request} eRequest 框架Request
      * @param {Response} eResponse 框架Response
      *
      * @returns {Promise<void>}
      */
-    public async login(eRequrest: Request, eResponse: Response): Promise<void> {
-        const account: string = eRequrest.body.account;
-        const password: string = eRequrest.body.password;
+    public async login(eRequest: Request, eResponse: Response): Promise<void> {
+        const account: string = eRequest.body.account;
+        const password: string = eRequest.body.password;
 
         // 登入
         const data: null | TypeAdmin = await this.srcAdmin.login(
@@ -55,16 +55,16 @@ export default class Admin {
     /**
      * 取得帳號資訊
      *
-     * @param {Request} eRequrest 框架Request
+     * @param {Request} eRequest 框架Request
      * @param {Response} eResponse 框架Response
      *
      * @returns {Promise<void>}
      */
     public async getInfo(
-        eRequrest: Request,
+        eRequest: Request,
         eResponse: Response
     ): Promise<void> {
-        const adminId: number = eRequrest.adminId!;
+        const adminId: number = eRequest.adminId!;
 
         // 取得帳號資訊
         const data: null | TypeAdmin = await this.srcAdmin.getInfo(adminId);

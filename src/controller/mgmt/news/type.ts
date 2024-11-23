@@ -15,17 +15,17 @@ export default class Admin {
     /**
      * 取得新聞類型分頁
      *
-     * @param {Request} eRequrest 框架Request
+     * @param {Request} eRequest 框架Request
      * @param {Response} eResponse 框架Response
      *
      * @returns {Promise<void>}
      */
     public async getPage(
-        eRequrest: Request,
+        eRequest: Request,
         eResponse: Response
     ): Promise<void> {
         const pageNumber: number = parseInt(
-            (eRequrest.query.pageNumber as string) ?? 1
+            (eRequest.query.pageNumber as string) ?? 1
         );
 
         const json: TypeResponse = {
@@ -40,17 +40,14 @@ export default class Admin {
     /**
      * 新增新聞類型
      *
-     * @param {Request} eRequrest 框架Request
+     * @param {Request} eRequest 框架Request
      * @param {Response} eResponse 框架Response
      *
      * @returns {Promise<void>}
      */
-    public async insert(
-        eRequrest: Request,
-        eResponse: Response
-    ): Promise<void> {
-        const request: TypeNewsType = this.getRequest(eRequrest);
-        const error: Result = validationResult(eRequrest);
+    public async insert(eRequest: Request, eResponse: Response): Promise<void> {
+        const request: TypeNewsType = this.getRequest(eRequest);
+        const error: Result = validationResult(eRequest);
 
         // 欄位驗證錯誤回傳
         if (error.isEmpty() === false) {
@@ -101,14 +98,14 @@ export default class Admin {
     /**
      * 取得Request
      *
-     * @param {Request} eRequrest 框架Request
+     * @param {Request} eRequest 框架Request
      *
      * @returns {TypeNewsType} Request
      */
-    private getRequest(eRequrest: Request): TypeNewsType {
+    private getRequest(eRequest: Request): TypeNewsType {
         const request: TypeNewsType = {
-            name: eRequrest.body.name,
-            status: eRequrest.body.status,
+            name: eRequest.body.name,
+            status: eRequest.body.status,
         };
 
         return request;
