@@ -5,6 +5,11 @@ import CtrlNewsType from "@/controller/mgmt/news/type";
 const router: Router = Router();
 const url: string = "/news/type";
 
+// 取得新聞類型
+router.get(url + "/:newsTypeId", (eRequest: Request, eResponse: Response) => {
+    new CtrlNewsType().get(eRequest, eResponse);
+});
+
 // 取得新聞類型分頁
 router.get(url, (eRequest: Request, eResponse: Response) => {
     new CtrlNewsType().getPage(eRequest, eResponse);

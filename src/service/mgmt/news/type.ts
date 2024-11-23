@@ -13,6 +13,27 @@ export default class Type {
     }
 
     /**
+     * 取得新聞類型
+     *
+     * @param {number} newesTypeId 新聞類型ID
+     *
+     * @returns {Promise<null | TypeNewsType>} 資料
+     */
+    public async get(newesTypeId: number): Promise<null | TypeNewsType> {
+        const model: null | ModelNewsType = await this.repoNewsType.getById(
+            newesTypeId
+        );
+
+        if (model === null) {
+            return null;
+        }
+
+        const data: TypeNewsType = this.setData(model);
+
+        return data;
+    }
+
+    /**
      * 取得新聞類型分頁
      *
      * @param {number} pageNumber 頁碼
@@ -77,6 +98,7 @@ export default class Type {
         const data: TypeNewsType = {
             newsTypeId: model.newsTypeId,
             name: model.name,
+            status: model.status,
         };
 
         return data;

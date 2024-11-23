@@ -13,6 +13,39 @@ export default class Admin {
     }
 
     /**
+     * 取得新聞類型
+     *
+     * @param {Request} eRequest 框架Request
+     * @param {Response} eResponse 框架Response
+     *
+     * @returns {Promise<void>}
+     */
+    public async get(eRequest: Request, eResponse: Response): Promise<void> {
+        const newsTypeId: string = eRequest.params.newsTypeId;
+
+        const data: null | TypeNewsType = await this.srcNewsType.get(
+            parseInt(newsTypeId)
+        );
+
+        if (data === null) {
+            const json: TypeResponse = {
+                message: "查無此新聞類型",
+            };
+
+            eResponse.status(404).json(json);
+            return;
+        }
+
+        const json: TypeResponse = {
+            message: "成功取得新聞類型",
+            data: data,
+        };
+
+        eResponse.status(200).json(json);
+        return;
+    }
+
+    /**
      * 取得新聞類型分頁
      *
      * @param {Request} eRequest 框架Request

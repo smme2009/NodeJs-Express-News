@@ -5,6 +5,21 @@ import ModelNewsType from "@/database/model/newsType";
 // 新聞類型
 export default class Type {
     /**
+     * 取得新聞類型(ID)
+     *
+     * @param {number} newsTypeId 新聞類型ID
+     *
+     * @returns {Promise<null | ModelNewsType>} Model
+     */
+    public async getById(newsTypeId: number): Promise<null | ModelNewsType> {
+        const model: null | ModelNewsType = await ModelNewsType.findByPk(
+            newsTypeId
+        );
+
+        return model;
+    }
+
+    /**
      * 取得新聞類型分頁
      *
      * @param {number} pageNumber 頁碼
