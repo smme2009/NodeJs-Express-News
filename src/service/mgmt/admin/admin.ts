@@ -5,8 +5,12 @@ import ModelAdmin from "@/database/model/admin";
 
 // 管理者
 export default class Admin {
+    // 管理者Respository
     private repoAdmin: RepoAdmin;
 
+    /**
+     * 建構子
+     */
     constructor() {
         this.repoAdmin = new RepoAdmin();
     }

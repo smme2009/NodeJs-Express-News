@@ -6,8 +6,12 @@ import ModelNewsType from "@/database/model/newsType";
 
 // 新聞類型
 export default class Type {
+    // 新聞類型Respository
     private repoNewsType: RepoNewsType;
 
+    /**
+     * 建構子
+     */
     constructor() {
         this.repoNewsType = new RepoNewsType();
     }

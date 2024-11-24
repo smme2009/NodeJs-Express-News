@@ -1,5 +1,6 @@
 import TypeJson from "@/type/system/json";
 
+// Controller
 export default class Controller {
     /**
      * 取得Response用JSON
