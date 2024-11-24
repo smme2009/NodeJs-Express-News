@@ -1,14 +1,18 @@
-import TypeResponse from "@/type/system/response";
+import Controller from "@/controller/controller";
+import TypeJson from "@/type/system/json";
 import TypeNewsType from "@/type/data/newsType";
+import TypePage from "@/type/data/page";
 import { Request, Response } from "express";
 import { validationResult, Result } from "express-validator";
 import SrcNewsType from "@/service/mgmt/news/type";
 
 // 新聞類型
-export default class Admin {
+export default class Admin extends Controller {
     private srcNewsType: SrcNewsType;
 
     constructor() {
+        super();
+
         this.srcNewsType = new SrcNewsType();
     }
 
@@ -28,19 +32,12 @@ export default class Admin {
         );
 
         if (data === null) {
-            const json: TypeResponse = {
-                message: "查無此新聞類型",
-            };
-
+            const json: TypeJson = this.getJson("查無此新聞類型");
             eResponse.status(404).json(json);
             return;
         }
 
-        const json: TypeResponse = {
-            message: "成功取得新聞類型",
-            data: data,
-        };
-
+        const json: TypeJson = this.getJson("成功取得新聞類型", data);
         eResponse.status(200).json(json);
         return;
     }
@@ -61,11 +58,11 @@ export default class Admin {
             (eRequest.query.pageNumber as string) ?? 1
         );
 
-        const json: TypeResponse = {
-            message: "成功取得新聞類型分頁",
-            data: await this.srcNewsType.getPage(pageNumber),
-        };
+        const data: TypePage<TypeNewsType> = await this.srcNewsType.getPage(
+            pageNumber
+        );
 
+        const json: TypeJson = this.getJson("成功取得新聞類型分頁", data);
         eResponse.status(200).json(json);
         return;
     }
@@ -84,11 +81,7 @@ export default class Admin {
 
         // 欄位驗證錯誤回傳
         if (error.isEmpty() === false) {
-            const json: TypeResponse = {
-                message: "欄位錯誤",
-                data: error.array(),
-            };
-
+            const json: TypeJson = this.getJson("欄位錯誤", error.array());
             eResponse.status(400).json(json);
             return;
         }
@@ -97,10 +90,7 @@ export default class Admin {
         const isPass: boolean = await this.srcNewsType.checkName(request.name);
 
         if (isPass === false) {
-            const json: TypeResponse = {
-                message: "名稱重複",
-            };
-
+            const json: TypeJson = this.getJson("名稱重複");
             eResponse.status(400).json(json);
             return;
         }
@@ -111,19 +101,12 @@ export default class Admin {
         );
 
         if (data === null) {
-            const json: TypeResponse = {
-                message: "新增新聞類型失敗",
-            };
-
+            const json: TypeJson = this.getJson("新增新聞類型失敗");
             eResponse.status(400).json(json);
             return;
         }
 
-        const json: TypeResponse = {
-            message: "成功新增新聞類型",
-            data: data,
-        };
-
+        const json: TypeJson = this.getJson("成功新增新聞類型", data);
         eResponse.status(201).json(json);
         return;
     }
@@ -143,11 +126,7 @@ export default class Admin {
 
         // 欄位驗證錯誤回傳
         if (error.isEmpty() === false) {
-            const json: TypeResponse = {
-                message: "欄位錯誤",
-                data: error.array(),
-            };
-
+            const json: TypeJson = this.getJson("欄位錯誤", error.array());
             eResponse.status(400).json(json);
             return;
         }
@@ -159,10 +138,7 @@ export default class Admin {
         );
 
         if (isPass === false) {
-            const json: TypeResponse = {
-                message: "名稱重複",
-            };
-
+            const json: TypeJson = this.getJson("名稱重複");
             eResponse.status(400).json(json);
             return;
         }
@@ -174,19 +150,12 @@ export default class Admin {
         );
 
         if (data === null) {
-            const json: TypeResponse = {
-                message: "更新新聞類型失敗",
-            };
-
+            const json: TypeJson = this.getJson("更新新聞類型失敗");
             eResponse.status(400).json(json);
             return;
         }
 
-        const json: TypeResponse = {
-            message: "成功更新新聞類型",
-            data: data,
-        };
-
+        const json: TypeJson = this.getJson("成功更新新聞類型", data);
         eResponse.status(200).json(json);
         return;
     }
@@ -207,18 +176,12 @@ export default class Admin {
         );
 
         if (isDelete === false) {
-            const json: TypeResponse = {
-                message: "刪除新聞類型失敗",
-            };
-
+            const json: TypeJson = this.getJson("刪除新聞類型失敗");
             eResponse.status(400).json(json);
             return;
         }
 
-        const json: TypeResponse = {
-            message: "成功刪除新聞類型",
-        };
-
+        const json: TypeJson = this.getJson("成功刪除新聞類型");
         eResponse.status(200).json(json);
         return;
     }
