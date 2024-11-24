@@ -7,12 +7,6 @@ import ToolJwt from "@/tool/jwt";
 
 // 管理者
 export default class Admin extends Controller {
-    // 框架Request
-    private request: Request;
-
-    // 框架Response
-    private response: Response;
-
     // 管理者Service
     private srcAdmin: SrcAdmin;
 
@@ -26,11 +20,7 @@ export default class Admin extends Controller {
      * @param {Response} response 框架Response
      */
     constructor(request: Request, response: Response) {
-        super();
-
-        this.request = request;
-        this.response = response;
-
+        super(request, response);
         this.srcAdmin = new SrcAdmin();
         this.toolJwt = new ToolJwt();
     }

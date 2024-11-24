@@ -8,12 +8,6 @@ import SrcNewsType from "@/service/mgmt/news/type";
 
 // 新聞類型
 export default class Admin extends Controller {
-    // 框架Request
-    private request: Request;
-
-    // 框架Response
-    private response: Response;
-
     // 新聞類型Service
     private srcNewsType: SrcNewsType;
 
@@ -24,11 +18,7 @@ export default class Admin extends Controller {
      * @param {Response} response 框架Response
      */
     constructor(request: Request, response: Response) {
-        super();
-
-        this.request = request;
-        this.response = response;
-
+        super(request, response);
         this.srcNewsType = new SrcNewsType();
     }
 
