@@ -4,9 +4,10 @@ import CtrlNewsType from "@/controller/mgmt/news/type";
 
 const router: Router = Router();
 const url: string = "/news/type";
+const urlWithId: string = url + "/:newsTypeId";
 
 // 取得新聞類型
-router.get(url + "/:newsTypeId", (eRequest: Request, eResponse: Response) => {
+router.get(urlWithId, (eRequest: Request, eResponse: Response) => {
     new CtrlNewsType().get(eRequest, eResponse);
 });
 
@@ -21,11 +22,16 @@ router.post(url, ValNewsType, (eRequest: Request, eResponse: Response) => {
 });
 
 // 更新新聞類型
-router.put(
-    url + "/:newsTypeId",
+router.put(urlWithId, ValNewsType, (eRequest: Request, eResponse: Response) => {
+    new CtrlNewsType().update(eRequest, eResponse);
+});
+
+// 刪除新聞類型
+router.delete(
+    urlWithId,
     ValNewsType,
     (eRequest: Request, eResponse: Response) => {
-        new CtrlNewsType().update(eRequest, eResponse);
+        new CtrlNewsType().delete(eRequest, eResponse);
     }
 );
 

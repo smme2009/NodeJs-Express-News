@@ -96,6 +96,17 @@ export default class Type {
     }
 
     /**
+     * 刪除新聞類型
+     *
+     * @param {number} newsTypeId 新聞類型ID
+     *
+     * @returns {Promise<boolean>} 是否成功
+     */
+    public async delete(newsTypeId: number): Promise<boolean> {
+        return await this.repoNewsType.delete(newsTypeId);
+    }
+
+    /**
      * 檢查名稱是否可用
      *
      * @param {string} name 名稱

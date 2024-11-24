@@ -99,6 +99,32 @@ export default class Type {
     }
 
     /**
+     * 刪除新聞類型
+     *
+     * @param {number} newsTypeId 新聞類型ID
+     *
+     * @returns {Promise<boolean>} 是否成功
+     */
+    public async delete(newsTypeId: number): Promise<boolean> {
+        const model: null | ModelNewsType = await this.getById(newsTypeId);
+
+        if (model === null) {
+            return false;
+        }
+
+        let isDelete: boolean = false;
+
+        try {
+            await model.destroy();
+            isDelete = true;
+        } catch (error: any) {
+            console.log("刪除新聞類型Model失敗");
+        }
+
+        return isDelete;
+    }
+
+    /**
      * 儲存Model
      *
      * @param {ModelNewsType} model Model

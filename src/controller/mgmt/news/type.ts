@@ -192,6 +192,38 @@ export default class Admin {
     }
 
     /**
+     * 刪除新聞類型
+     *
+     * @param {Request} eRequest 框架Request
+     * @param {Response} eResponse 框架Response
+     *
+     * @returns {Promise<void>}
+     */
+    public async delete(eRequest: Request, eResponse: Response): Promise<void> {
+        const newsTypeId: string = eRequest.params.newsTypeId;
+
+        const isDelete: boolean = await this.srcNewsType.delete(
+            parseInt(newsTypeId)
+        );
+
+        if (isDelete === false) {
+            const json: TypeResponse = {
+                message: "刪除新聞類型失敗",
+            };
+
+            eResponse.status(400).json(json);
+            return;
+        }
+
+        const json: TypeResponse = {
+            message: "成功刪除新聞類型",
+        };
+
+        eResponse.status(200).json(json);
+        return;
+    }
+
+    /**
      * 取得Request
      *
      * @param {Request} eRequest 框架Request
