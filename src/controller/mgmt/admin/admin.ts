@@ -7,11 +7,30 @@ import ToolJwt from "@/tool/jwt";
 
 // 管理者
 export default class Admin extends Controller {
+    // 框架Request
+    private request: Request;
+
+    // 框架Response
+    private response: Response;
+
+    // 管理者Service
     private srcAdmin: SrcAdmin;
+
+    // JWT工具
     private toolJwt: ToolJwt;
 
-    constructor() {
+    /**
+     * 建構子
+     *
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     */
+    constructor(request: Request, response: Response) {
         super();
+
+        this.request = request;
+        this.response = response;
+
         this.srcAdmin = new SrcAdmin();
         this.toolJwt = new ToolJwt();
     }
@@ -19,14 +38,11 @@ export default class Admin extends Controller {
     /**
      * 登入
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async login(eRequest: Request, eResponse: Response): Promise<void> {
-        const account: string = eRequest.body.account;
-        const password: string = eRequest.body.password;
+    public async login(): Promise<void> {
+        const account: string = this.request.body.account;
+        const password: string = this.request.body.password;
 
         // 登入
         const data: null | TypeAdmin = await this.srcAdmin.login(
@@ -36,7 +52,7 @@ export default class Admin extends Controller {
 
         if (data === null) {
             const json: TypeJson = this.getJson("登入失敗");
-            eResponse.status(401).json(json);
+            this.response.status(401).json(json);
             return;
         }
 
@@ -44,35 +60,29 @@ export default class Admin extends Controller {
             jwtToken: this.toolJwt.encode({ adminId: data.adminId }),
         });
 
-        eResponse.status(200).json(json);
+        this.response.status(200).json(json);
         return;
     }
 
     /**
      * 取得帳號資訊
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async getInfo(
-        eRequest: Request,
-        eResponse: Response
-    ): Promise<void> {
-        const adminId: number = eRequest.adminId!;
+    public async getInfo(): Promise<void> {
+        const adminId: number = this.request.adminId!;
 
         // 取得帳號資訊
         const data: null | TypeAdmin = await this.srcAdmin.getInfo(adminId);
 
         if (data === null) {
             const json: TypeJson = this.getJson("取得帳號資訊失敗");
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
         const json: TypeJson = this.getJson("成功取得帳號資訊", data);
-        eResponse.status(200).json(json);
+        this.response.status(200).json(json);
         return;
     }
 }

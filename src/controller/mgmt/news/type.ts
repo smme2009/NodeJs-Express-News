@@ -8,10 +8,26 @@ import SrcNewsType from "@/service/mgmt/news/type";
 
 // 新聞類型
 export default class Admin extends Controller {
+    // 框架Request
+    private request: Request;
+
+    // 框架Response
+    private response: Response;
+
+    // 新聞類型Service
     private srcNewsType: SrcNewsType;
 
-    constructor() {
+    /**
+     * 建構子
+     *
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     */
+    constructor(request: Request, response: Response) {
         super();
+
+        this.request = request;
+        this.response = response;
 
         this.srcNewsType = new SrcNewsType();
     }
@@ -19,13 +35,10 @@ export default class Admin extends Controller {
     /**
      * 取得新聞類型
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async get(eRequest: Request, eResponse: Response): Promise<void> {
-        const newsTypeId: string = eRequest.params.newsTypeId;
+    public async get(): Promise<void> {
+        const newsTypeId: string = this.request.params.newsTypeId;
 
         const data: null | TypeNewsType = await this.srcNewsType.get(
             parseInt(newsTypeId)
@@ -33,29 +46,23 @@ export default class Admin extends Controller {
 
         if (data === null) {
             const json: TypeJson = this.getJson("查無此新聞類型");
-            eResponse.status(404).json(json);
+            this.response.status(404).json(json);
             return;
         }
 
         const json: TypeJson = this.getJson("成功取得新聞類型", data);
-        eResponse.status(200).json(json);
+        this.response.status(200).json(json);
         return;
     }
 
     /**
      * 取得新聞類型分頁
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async getPage(
-        eRequest: Request,
-        eResponse: Response
-    ): Promise<void> {
+    public async getPage(): Promise<void> {
         const pageNumber: number = parseInt(
-            (eRequest.query.pageNumber as string) ?? 1
+            (this.request.query.pageNumber as string) ?? 1
         );
 
         const data: TypePage<TypeNewsType> = await this.srcNewsType.getPage(
@@ -63,26 +70,23 @@ export default class Admin extends Controller {
         );
 
         const json: TypeJson = this.getJson("成功取得新聞類型分頁", data);
-        eResponse.status(200).json(json);
+        this.response.status(200).json(json);
         return;
     }
 
     /**
      * 新增新聞類型
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async insert(eRequest: Request, eResponse: Response): Promise<void> {
-        const request: TypeNewsType = this.getRequest(eRequest);
-        const error: Result = validationResult(eRequest);
+    public async insert(): Promise<void> {
+        const request: TypeNewsType = this.getRequest();
+        const error: Result = validationResult(this.request);
 
         // 欄位驗證錯誤回傳
         if (error.isEmpty() === false) {
             const json: TypeJson = this.getJson("欄位錯誤", error.array());
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
@@ -91,7 +95,7 @@ export default class Admin extends Controller {
 
         if (isPass === false) {
             const json: TypeJson = this.getJson("名稱重複");
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
@@ -102,32 +106,29 @@ export default class Admin extends Controller {
 
         if (data === null) {
             const json: TypeJson = this.getJson("新增新聞類型失敗");
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
         const json: TypeJson = this.getJson("成功新增新聞類型", data);
-        eResponse.status(201).json(json);
+        this.response.status(201).json(json);
         return;
     }
 
     /**
      * 更新新聞類型
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async update(eRequest: Request, eResponse: Response): Promise<void> {
-        const newsTypeId: string = eRequest.params.newsTypeId;
-        const request: TypeNewsType = this.getRequest(eRequest);
-        const error: Result = validationResult(eRequest);
+    public async update(): Promise<void> {
+        const newsTypeId: string = this.request.params.newsTypeId;
+        const request: TypeNewsType = this.getRequest();
+        const error: Result = validationResult(this.request);
 
         // 欄位驗證錯誤回傳
         if (error.isEmpty() === false) {
             const json: TypeJson = this.getJson("欄位錯誤", error.array());
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
@@ -139,7 +140,7 @@ export default class Admin extends Controller {
 
         if (isPass === false) {
             const json: TypeJson = this.getJson("名稱重複");
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
@@ -151,25 +152,22 @@ export default class Admin extends Controller {
 
         if (data === null) {
             const json: TypeJson = this.getJson("更新新聞類型失敗");
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
         const json: TypeJson = this.getJson("成功更新新聞類型", data);
-        eResponse.status(200).json(json);
+        this.response.status(200).json(json);
         return;
     }
 
     /**
      * 刪除新聞類型
      *
-     * @param {Request} eRequest 框架Request
-     * @param {Response} eResponse 框架Response
-     *
      * @returns {Promise<void>}
      */
-    public async delete(eRequest: Request, eResponse: Response): Promise<void> {
-        const newsTypeId: string = eRequest.params.newsTypeId;
+    public async delete(): Promise<void> {
+        const newsTypeId: string = this.request.params.newsTypeId;
 
         const isDelete: boolean = await this.srcNewsType.delete(
             parseInt(newsTypeId)
@@ -177,26 +175,24 @@ export default class Admin extends Controller {
 
         if (isDelete === false) {
             const json: TypeJson = this.getJson("刪除新聞類型失敗");
-            eResponse.status(400).json(json);
+            this.response.status(400).json(json);
             return;
         }
 
         const json: TypeJson = this.getJson("成功刪除新聞類型");
-        eResponse.status(200).json(json);
+        this.response.status(200).json(json);
         return;
     }
 
     /**
      * 取得Request
      *
-     * @param {Request} eRequest 框架Request
-     *
      * @returns {TypeNewsType} Request
      */
-    private getRequest(eRequest: Request): TypeNewsType {
+    private getRequest(): TypeNewsType {
         const request: TypeNewsType = {
-            name: eRequest.body.name,
-            status: eRequest.body.status,
+            name: this.request.body.name,
+            status: this.request.body.status,
         };
 
         return request;
