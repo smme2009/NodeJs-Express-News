@@ -5,8 +5,12 @@ import ModelAdmin from "@/database/model/admin";
 
 // 管理者
 export default class Admin {
+    // 管理者Respository
     private repoAdmin: RepoAdmin;
 
+    /**
+     * 建構子
+     */
     constructor() {
         this.repoAdmin = new RepoAdmin();
     }
@@ -24,7 +28,7 @@ export default class Admin {
         password: string
     ): Promise<null | TypeAdmin> {
         // 透過帳號取得資料
-        const model: null | ModelAdmin = await this.repoAdmin.getWithAccount(
+        const model: null | ModelAdmin = await this.repoAdmin.getByAccount(
             account
         );
 
@@ -51,9 +55,7 @@ export default class Admin {
      */
     public async getInfo(adminId: number): Promise<null | TypeAdmin> {
         // 透過ID取得資料
-        const model: null | ModelAdmin = await this.repoAdmin.getWithId(
-            adminId
-        );
+        const model: null | ModelAdmin = await this.repoAdmin.getById(adminId);
 
         if (model === null) {
             return null;

@@ -1,4 +1,4 @@
-export default interface Response {
+export default interface Json {
     message: string;
     data?: object;
 }

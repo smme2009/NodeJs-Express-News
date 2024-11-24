@@ -5,7 +5,7 @@ const router: Router = Router();
 
 // 登入
 router.post("/login", (eRequest: Request, eResponse: Response) => {
-    new CtrlAdmin().login(eRequest, eResponse);
+    new CtrlAdmin(eRequest, eResponse).login();
 });
 
 export default router;

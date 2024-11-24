@@ -1,4 +1,4 @@
-import TypeResponse from "@/type/system/response";
+import TypeJson from "@/type/system/json";
 import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import ToolJwt from "@/tool/jwt";
@@ -20,7 +20,7 @@ export default class Account {
         const auth: undefined | string = eRequest.headers.authorization;
 
         if (auth === undefined) {
-            const json: TypeResponse = {
+            const json: TypeJson = {
                 message: "查無JWT Token",
             };
 
@@ -34,7 +34,7 @@ export default class Account {
         const data: null | JwtPayload = this.toolJwt.decode(jwtToken);
 
         if (data === null) {
-            const json: TypeResponse = {
+            const json: TypeJson = {
                 message: "JWT Token驗證失敗",
             };
 
