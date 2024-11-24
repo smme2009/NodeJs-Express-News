@@ -51,9 +51,7 @@ export default class Admin extends Controller {
      * @returns {Promise<void>}
      */
     public async getPage(): Promise<void> {
-        const pageNumber: number = parseInt(
-            (this.request.query.pageNumber as string) ?? 1
-        );
+        const pageNumber: number = this.getPageNumber();
 
         const data: TypePage<TypeNewsType> = await this.srcNewsType.getPage(
             pageNumber

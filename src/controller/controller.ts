@@ -36,4 +36,22 @@ export default class Controller {
 
         return json;
     }
+
+    /**
+     * 取得頁碼
+     *
+     * @returns {number} 頁碼
+     */
+    protected getPageNumber(): number {
+        // 取得頁碼，若沒有則預設第1頁
+        const sPageNumber: string =
+            (this.request.query.pageNumber as string) ?? "1";
+
+        let pageNumber: number = parseInt(sPageNumber);
+
+        // 輸入頁碼小於1時，預設第1頁
+        pageNumber = pageNumber < 1 ? 1 : pageNumber;
+
+        return pageNumber;
+    }
 }
