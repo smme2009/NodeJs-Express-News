@@ -16,6 +16,9 @@ declare namespace NodeJS {
         // CORS
         CORS_URL: string;
 
+        // JWT
+        JWT_LIMIT_DAY: string;
+
         PAGE_SIZE: string;
     }
 }
