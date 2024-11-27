@@ -13,6 +13,10 @@ declare namespace NodeJS {
         DB_USERNAME: string;
         DB_PASSWORD: string;
 
+        // Redis
+        REDIS_HOST: string;
+        REDIS_PORT: string;
+
         // CORS
         CORS_URL: string;
 
