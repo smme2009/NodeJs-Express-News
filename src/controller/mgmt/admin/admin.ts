@@ -86,4 +86,26 @@ export default class Admin extends Controller {
         this.response.status(200).json(json);
         return;
     }
+
+    /**
+     * 登出
+     *
+     * @returns {Promise<void>}
+     */
+    public async logout(): Promise<void> {
+        const jwtToken: string = this.request.jwtToken!;
+
+        // 登出
+        const isDelete: boolean = await this.srcAdmin.logout(jwtToken);
+
+        if (isDelete === false) {
+            const json: TypeJson = this.getJson("登出失敗");
+            this.response.status(400).json(json);
+            return;
+        }
+
+        const json: TypeJson = this.getJson("成功登出");
+        this.response.status(200).json(json);
+        return;
+    }
 }

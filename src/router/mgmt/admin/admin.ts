@@ -8,4 +8,9 @@ router.get("/admin/info", (eRequest: Request, eResponse: Response) => {
     new CtrlAdmin(eRequest, eResponse).getInfo();
 });
 
+// 登出
+router.post("/logout", (eRequest: Request, eResponse: Response) => {
+    new CtrlAdmin(eRequest, eResponse).logout();
+});
+
 export default router;

@@ -62,8 +62,10 @@ export default class Account {
             return;
         }
 
-        // 設定帳號ID
+        // 設定Request
         eRequest.adminId = data.adminId;
+        eRequest.jwtToken = jwtToken;
+
         eNext();
     }
 }
