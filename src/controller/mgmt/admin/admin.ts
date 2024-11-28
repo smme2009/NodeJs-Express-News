@@ -62,7 +62,6 @@ export default class Admin extends Controller {
         });
 
         this.response.status(200).json(json);
-        return;
     }
 
     /**
@@ -84,7 +83,6 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功取得帳號資訊", data);
         this.response.status(200).json(json);
-        return;
     }
 
     /**
@@ -106,6 +104,5 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功登出");
         this.response.status(200).json(json);
-        return;
     }
 }

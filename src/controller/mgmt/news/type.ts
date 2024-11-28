@@ -42,7 +42,6 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功取得新聞類型", data);
         this.response.status(200).json(json);
-        return;
     }
 
     /**
@@ -59,7 +58,6 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功取得新聞類型分頁", data);
         this.response.status(200).json(json);
-        return;
     }
 
     /**
@@ -100,7 +98,6 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功新增新聞類型", data);
         this.response.status(201).json(json);
-        return;
     }
 
     /**
@@ -146,7 +143,6 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功更新新聞類型", data);
         this.response.status(200).json(json);
-        return;
     }
 
     /**
@@ -169,7 +165,6 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功刪除新聞類型");
         this.response.status(200).json(json);
-        return;
     }
 
     /**
