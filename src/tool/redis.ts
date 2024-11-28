@@ -2,8 +2,12 @@ import { createClient, RedisClientType } from "redis";
 
 // Redis工具
 export default class Redis {
+    // Redis套件
     private redis: RedisClientType;
 
+    /**
+     * 建構子
+     */
     constructor() {
         const host: string = process.env.REDIS_HOST;
         const port: string = process.env.REDIS_PORT;
@@ -44,5 +48,19 @@ export default class Redis {
         const isSet: boolean = result === "OK" ? true : false;
 
         return isSet;
+    }
+
+    /**
+     * 是否有鍵
+     *
+     * @param {string} key 鍵
+     *
+     * @returns {Promise<null | string>} 值
+     */
+    public async hasKey(key: string): Promise<boolean> {
+        const total: number = await this.redis.exists(key);
+        const hasKey: boolean = total === 1 ? true : false;
+
+        return hasKey;
     }
 }
