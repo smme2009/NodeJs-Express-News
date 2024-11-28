@@ -4,6 +4,7 @@ import TypeAdmin from "@/type/data/admin";
 import { Request, Response } from "express";
 import SrcAdmin from "@/service/mgmt/admin/admin";
 import ToolJwt from "@/tool/jwt";
+import ToolRedis from "@/tool/redis";
 
 // 管理者
 export default class Admin extends Controller {
@@ -12,6 +13,9 @@ export default class Admin extends Controller {
 
     // JWT工具
     private toolJwt: ToolJwt;
+
+    // Redis工具
+    private toolRedis: ToolRedis;
 
     /**
      * 建構子
@@ -23,6 +27,7 @@ export default class Admin extends Controller {
         super(request, response);
         this.srcAdmin = new SrcAdmin();
         this.toolJwt = new ToolJwt();
+        this.toolRedis = new ToolRedis();
     }
 
     /**
@@ -46,12 +51,17 @@ export default class Admin extends Controller {
             return;
         }
 
+        const jwtToken: string = this.toolJwt.encode({ adminId: data.adminId });
+        const limitTime: number = parseInt(process.env.JWT_LIMIT_DAY) * 86400;
+
+        // 設定白名單
+        this.toolRedis.set(`jwtToken-${jwtToken}`, data.adminId, limitTime);
+
         const json: TypeJson = this.getJson("登入成功", {
-            jwtToken: this.toolJwt.encode({ adminId: data.adminId }),
+            jwtToken: jwtToken,
         });
 
         this.response.status(200).json(json);
-        return;
     }
 
     /**
@@ -73,6 +83,26 @@ export default class Admin extends Controller {
 
         const json: TypeJson = this.getJson("成功取得帳號資訊", data);
         this.response.status(200).json(json);
-        return;
+    }
+
+    /**
+     * 登出
+     *
+     * @returns {Promise<void>}
+     */
+    public async logout(): Promise<void> {
+        const jwtToken: string = this.request.jwtToken!;
+
+        // 登出
+        const isDelete: boolean = await this.srcAdmin.logout(jwtToken);
+
+        if (isDelete === false) {
+            const json: TypeJson = this.getJson("登出失敗");
+            this.response.status(400).json(json);
+            return;
+        }
+
+        const json: TypeJson = this.getJson("成功登出");
+        this.response.status(200).json(json);
     }
 }

@@ -18,7 +18,7 @@ export default class ToolJwt {
 
         const option: object = {
             algorithm: "HS256", // 雜湊方式
-            expiresIn: "1d", // 有效時間
+            expiresIn: `${process.env.JWT_LIMIT_DAY}d`, // 有效時間
         };
 
         const jwtToken: string = sign(payload, process.env.APP_KEY!, option);

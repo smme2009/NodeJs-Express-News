@@ -2,17 +2,22 @@ import TypeAdmin from "@/type/data/admin";
 import Bcrypt from "bcrypt";
 import RepoAdmin from "@/respository/mgmt/admin/admin";
 import ModelAdmin from "@/database/model/admin";
+import ToolRedis from "@/tool/redis";
 
 // 管理者
 export default class Admin {
     // 管理者Respository
     private repoAdmin: RepoAdmin;
 
+    // Redis工具
+    private toolRedis: ToolRedis;
+
     /**
      * 建構子
      */
     constructor() {
         this.repoAdmin = new RepoAdmin();
+        this.toolRedis = new ToolRedis();
     }
 
     /**
@@ -62,6 +67,17 @@ export default class Admin {
         }
 
         return this.setData(model);
+    }
+
+    /**
+     * 登出
+     *
+     * @param {string} jwtToken JWT Token
+     *
+     * @returns {Promise<boolean>} 是否成功
+     */
+    public async logout(jwtToken: string): Promise<boolean> {
+        return await this.toolRedis.delete(`jwtToken-${jwtToken}`);
     }
 
     /**

@@ -1,14 +1,14 @@
-import express from "express";
+import Express from "express";
 import BodyParser from "body-parser";
-import env from "dotenv";
+import Env from "dotenv";
 import RtMgmt from "@/router/mgmt/index";
 import { Sequelize } from "sequelize-typescript";
 
 // 初始化框架
-const app = express();
+const app = Express();
 
 // 初始化env
-env.config();
+Env.config();
 
 // 初始化資料庫
 const sequelize: Sequelize = new Sequelize(
