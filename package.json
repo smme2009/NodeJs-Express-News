@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -r dotenv/config -r tsconfig-paths/register --files src/app.ts",
     "build": "tsc && tsc-alias",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "serve": "node -r dotenv/config dist/app.js"
   },
   "author": "",
   "license": "ISC",
