@@ -55,12 +55,26 @@ export default class Redis {
      *
      * @param {string} key 鍵
      *
-     * @returns {Promise<null | string>} 值
+     * @returns {Promise<boolean>} 是否有鍵
      */
     public async hasKey(key: string): Promise<boolean> {
         const total: number = await this.redis.exists(key);
         const hasKey: boolean = total === 1 ? true : false;
 
         return hasKey;
+    }
+
+    /**
+     * 刪除
+     *
+     * @param {string} key 鍵
+     *
+     * @returns {Promise<boolean>} 是否刪除
+     */
+    public async delete(key: string): Promise<boolean> {
+        const total: number = await this.redis.del(key);
+        const isDelete: boolean = total === 1 ? true : false;
+
+        return isDelete;
     }
 }
