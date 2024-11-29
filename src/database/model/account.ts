@@ -1,24 +1,24 @@
 import { Table, Model, Column, DataType } from "sequelize-typescript";
 
-// 管理者
+// 帳號
 @Table({
-    tableName: "admin",
+    tableName: "account",
     timestamps: true,
     paranoid: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
     deletedAt: "deleted_at",
 })
-export default class Admin extends Model {
+export default class Account extends Model {
     @Column({
-        field: "admin_id",
+        field: "account_id",
         type: DataType.BIGINT.UNSIGNED,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
-        comment: "管理者ID",
+        comment: "帳號ID",
     })
-    adminId!: number;
+    accountId!: number;
 
     @Column({
         field: "account",
