@@ -1,4 +1,13 @@
-import { Table, Model, Column, DataType } from "sequelize-typescript";
+import {
+    Table,
+    Model,
+    Column,
+    DataType,
+    BelongsToMany,
+} from "sequelize-typescript";
+
+import ModelRole from "@/database/model/role";
+import ModelAccountRole from "@/database/model/accountRole";
 
 // 帳號
 @Table({
@@ -52,4 +61,7 @@ export default class Account extends Model {
         comment: "狀態",
     })
     status!: number;
+
+    @BelongsToMany(() => ModelRole, () => ModelAccountRole)
+    role!: ModelRole[];
 }
