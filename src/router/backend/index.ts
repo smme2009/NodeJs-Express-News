@@ -1,12 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import MwAccount from "@/middleware/account";
-import RtLogin from "@/router/mgmt/admin/login";
-import RtAdmin from "@/router/mgmt/admin/admin";
-import RtNews from "@/router/mgmt/news/type";
+import RtLogin from "@/router/backend/admin/login";
+import RtAdmin from "@/router/backend/admin/admin";
+import RtNews from "@/router/backend/news/type";
 import ConfigRole from "@/config/role";
 
 const router: Router = Router();
-const url: string = "/api/mgmt";
+const url: string = "/api/backend";
 const roleId: number = ConfigRole.admin as number;
 const mwAccount: MwAccount = new MwAccount(roleId);
 
