@@ -53,6 +53,22 @@ export default class Type {
     }
 
     /**
+     * 取得所有新聞類型
+     *
+     * @param {boolean} hasCondition 是否附加條件
+     *
+     * @returns {Promise<ModelNewsType[]>} 所有資料
+     */
+    public async getAll(hasCondition: boolean): Promise<ModelNewsType[]> {
+        const modelAll: ModelNewsType[] = await ModelNewsType.findAll({
+            where: hasCondition === true ? this.getCondition() : undefined,
+            order: [["newsTypeId", "DESC"]],
+        });
+
+        return modelAll;
+    }
+
+    /**
      * 新增新聞類型
      *
      * @param {TypeNewsType} data 資料

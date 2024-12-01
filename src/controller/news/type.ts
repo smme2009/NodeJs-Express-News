@@ -67,6 +67,22 @@ export default class Admin extends Controller {
     }
 
     /**
+     * 取得所有新聞類型
+     *
+     * @param {boolean} hasCondition 是否附加條件
+     *
+     * @returns {Promise<void>}
+     */
+    public async getAll(hasCondition: boolean): Promise<void> {
+        const data: TypeNewsType[] = await this.srcNewsType.getAll(
+            hasCondition
+        );
+
+        const json: TypeJson = this.getJson("成功取得所有新聞類型", data);
+        this.response.status(200).json(json);
+    }
+
+    /**
      * 新增新聞類型
      *
      * @returns {Promise<void>}

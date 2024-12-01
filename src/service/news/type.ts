@@ -66,6 +66,25 @@ export default class Type {
     }
 
     /**
+     * 取得所有新聞類型
+     *
+     * @param {boolean} hasCondition 是否附加條件
+     *
+     * @returns {TypeNewsType[]} 所有新聞類型
+     */
+    public async getAll(hasCondition: boolean): Promise<TypeNewsType[]> {
+        const modelAll: ModelNewsType[] = await this.repoNewsType.getAll(
+            hasCondition
+        );
+
+        const all: TypeNewsType[] = modelAll.map((item) => {
+            return this.setData(item);
+        });
+
+        return all;
+    }
+
+    /**
      * 新增新聞類型
      *
      * @param {TypeNewsType} data 資料

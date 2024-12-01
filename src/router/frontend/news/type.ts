@@ -6,6 +6,11 @@ const url: string = "/news/type";
 const hasCondition: boolean = true;
 const urlWithId: string = url + "/:newsTypeId";
 
+// 取得新聞類型列表
+router.get(url + "/all", (eRequest: Request, eResponse: Response) => {
+    new CtrlNewsType(eRequest, eResponse).getAll(hasCondition);
+});
+
 // 取得新聞類型
 router.get(urlWithId, (eRequest: Request, eResponse: Response) => {
     new CtrlNewsType(eRequest, eResponse).get(hasCondition);
