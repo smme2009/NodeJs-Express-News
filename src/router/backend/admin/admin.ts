@@ -1,16 +1,18 @@
 import { Router, Request, Response } from "express";
-import CtrlAdmin from "@/controller/mgmt/admin/admin";
+import CtrlAccount from "@/controller/account/account";
+import ConfigRole from "@/config/role";
 
 const router: Router = Router();
+const roleId: number = ConfigRole.admin as number;
 
 // 帳號資訊
 router.get("/admin/info", (eRequest: Request, eResponse: Response) => {
-    new CtrlAdmin(eRequest, eResponse).getInfo();
+    new CtrlAccount(eRequest, eResponse, roleId).getInfo();
 });
 
 // 登出
 router.post("/logout", (eRequest: Request, eResponse: Response) => {
-    new CtrlAdmin(eRequest, eResponse).logout();
+    new CtrlAccount(eRequest, eResponse, roleId).logout();
 });
 
 export default router;

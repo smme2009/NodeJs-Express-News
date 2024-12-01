@@ -12,9 +12,18 @@ export default class Account {
     // Redis工具
     private toolRedis: ToolRedis;
 
-    constructor() {
+    // 角色ID
+    private roleId: number;
+
+    /**
+     * 建構子
+     *
+     * @param {number} roleId 角色ID
+     */
+    constructor(roleId: number) {
         this.toolJwt = new ToolJwt();
         this.toolRedis = new ToolRedis();
+        this.roleId = roleId;
     }
 
     // 中介層處理
@@ -62,8 +71,20 @@ export default class Account {
             return;
         }
 
+        // 驗證身份
+        const isRole: boolean = data.roleId === this.roleId ? true : false;
+
+        if (isRole === false) {
+            const json: TypeJson = {
+                message: "身份驗證失敗",
+            };
+
+            eResponse.status(401).json(json);
+            return;
+        }
+
         // 設定Request
-        eRequest.adminId = data.adminId;
+        eRequest.accountId = data.accountId;
         eRequest.jwtToken = jwtToken;
 
         eNext();

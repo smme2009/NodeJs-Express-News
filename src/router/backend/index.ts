@@ -1,12 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
 import MwAccount from "@/middleware/account";
-import RtLogin from "@/router/mgmt/admin/login";
-import RtAdmin from "@/router/mgmt/admin/admin";
-import RtNews from "@/router/mgmt/news/type";
+import RtLogin from "@/router/backend/admin/login";
+import RtAdmin from "@/router/backend/admin/admin";
+import RtNews from "@/router/backend/news/type";
+import ConfigRole from "@/config/role";
 
 const router: Router = Router();
-const url: string = "/api/mgmt";
-const mvAccount: MwAccount = new MwAccount();
+const url: string = "/api/backend";
+const roleId: number = ConfigRole.admin as number;
+const mwAccount: MwAccount = new MwAccount(roleId);
 
 // 登入
 router.use(url, RtLogin);
@@ -15,7 +17,7 @@ router.use(url, RtLogin);
 router.use(
     url,
     (eRequest: Request, eResponse: Response, eNext: NextFunction) => {
-        mvAccount.handle(eRequest, eResponse, eNext);
+        mwAccount.handle(eRequest, eResponse, eNext);
     }
 );
 
