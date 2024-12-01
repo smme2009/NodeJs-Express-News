@@ -1,21 +1,21 @@
 "use strict";
 
 /**
- * 會員資料表
+ * 帳號資料表
  * 
  * @type {import('sequelize-cli').Migration}
  */
 module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.createTable(
-			"admin",
+			"account",
 			{
-				admin_id: {
+				account_id: {
 					type: Sequelize.BIGINT.UNSIGNED,
 					primaryKey: true,
 					autoIncrement: true,
 					allowNull: false,
-					comment: '管理者ID'
+					comment: '帳號ID'
 				},
 				account: {
 					type: Sequelize.STRING,
@@ -57,6 +57,6 @@ module.exports = {
 		);
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("admin");
+		await queryInterface.dropTable("account");
 	},
 };
