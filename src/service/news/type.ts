@@ -1,7 +1,7 @@
 import TypeNewsType from "@/type/data/newsType";
 import TypePage from "@/type/data/page";
 import TypeModelPage from "@/type/system/modelPage";
-import RepoNewsType from "@/respository/mgmt/news/type";
+import RepoNewsType from "@/respository/news/type";
 import ModelNewsType from "@/database/model/newsType";
 
 // 新聞類型
@@ -20,12 +20,17 @@ export default class Type {
      * 取得新聞類型
      *
      * @param {number} newesTypeId 新聞類型ID
+     * @param {boolean} hasCondition 是否附加條件
      *
      * @returns {Promise<null | TypeNewsType>} 資料
      */
-    public async get(newesTypeId: number): Promise<null | TypeNewsType> {
+    public async get(
+        newesTypeId: number,
+        hasCondition: boolean
+    ): Promise<null | TypeNewsType> {
         const model: null | ModelNewsType = await this.repoNewsType.getById(
-            newesTypeId
+            newesTypeId,
+            hasCondition
         );
 
         if (model === null) {
@@ -41,12 +46,16 @@ export default class Type {
      * 取得新聞類型分頁
      *
      * @param {number} pageNumber 頁碼
+     * @param {boolean} hasCondition 是否附加條件
      *
      * @returns {Promise<TypePage<TypeNewsType>>} 分頁資料
      */
-    public async getPage(pageNumber: number): Promise<TypePage<TypeNewsType>> {
+    public async getPage(
+        pageNumber: number,
+        hasCondition: boolean
+    ): Promise<TypePage<TypeNewsType>> {
         const modelPage: TypeModelPage<ModelNewsType> =
-            await this.repoNewsType.getPage(pageNumber);
+            await this.repoNewsType.getPage(pageNumber, hasCondition);
 
         const page: TypePage<TypeNewsType> = {
             total: modelPage.count,

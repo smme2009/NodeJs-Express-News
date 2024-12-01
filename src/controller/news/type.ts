@@ -4,7 +4,7 @@ import TypeNewsType from "@/type/data/newsType";
 import TypePage from "@/type/data/page";
 import { Request, Response } from "express";
 import { validationResult, Result } from "express-validator";
-import SrcNewsType from "@/service/mgmt/news/type";
+import SrcNewsType from "@/service/news/type";
 
 // 新聞類型
 export default class Admin extends Controller {
@@ -25,13 +25,16 @@ export default class Admin extends Controller {
     /**
      * 取得新聞類型
      *
+     * @param {boolean} hasCondition 是否附加條件
+     *
      * @returns {Promise<void>}
      */
-    public async get(): Promise<void> {
+    public async get(hasCondition: boolean): Promise<void> {
         const newsTypeId: string = this.request.params.newsTypeId;
 
         const data: null | TypeNewsType = await this.srcNewsType.get(
-            parseInt(newsTypeId)
+            parseInt(newsTypeId),
+            hasCondition
         );
 
         if (data === null) {
@@ -47,13 +50,16 @@ export default class Admin extends Controller {
     /**
      * 取得新聞類型分頁
      *
+     * @param {boolean} hasCondition 是否附加條件
+     *
      * @returns {Promise<void>}
      */
-    public async getPage(): Promise<void> {
+    public async getPage(hasCondition: boolean): Promise<void> {
         const pageNumber: number = this.getPageNumber();
 
         const data: TypePage<TypeNewsType> = await this.srcNewsType.getPage(
-            pageNumber
+            pageNumber,
+            hasCondition
         );
 
         const json: TypeJson = this.getJson("成功取得新聞類型分頁", data);
