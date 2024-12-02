@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import ValNewsType from "@/validation/mgmt/news/type";
+import ValNewsType from "@/validation/news/type";
 import CtrlNewsType from "@/controller/news/type";
 
 const router: Router = Router();
