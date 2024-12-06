@@ -1,14 +1,14 @@
+import TypeConfig from "@/type/system/config";
+import TypeJson from "@/type/system/json";
 import Multer, { FileFilterCallback } from "multer";
 import { Request, Response, NextFunction } from "express";
 import Crypto from "crypto";
 import Path from "path";
 import FS from "fs";
+import ConfigFile from "@/config/file";
 
 // 檔案
 export default class file {
-    // 可通過格式，這邊先設定一個整體，詳細的檢查交由service
-    private format: string[] = ["jpeg", "png", "gif"];
-
     /**
      * 中介層處理
      *
@@ -19,6 +19,19 @@ export default class file {
         eResponse: Response,
         eNext: NextFunction
     ): void {
+        const type: string = eRequest.params.type;
+        const configFile: TypeConfig = ConfigFile[type];
+
+        // 檢查上傳類型
+        if (configFile === undefined) {
+            const json: TypeJson = {
+                message: "上傳類型錯誤",
+            };
+
+            eResponse.status(400).json(json);
+            return;
+        }
+
         // 設定套件
         const multer: Multer.Multer = Multer({
             storage: Multer.diskStorage({
@@ -28,7 +41,8 @@ export default class file {
                     file: Express.Multer.File,
                     callback
                 ) => {
-                    callback(null, this.getPath());
+                    const fullPath: string = this.getFullPath(configFile.path);
+                    callback(null, fullPath);
                 },
                 // 檔案名稱
                 filename: (
@@ -41,7 +55,7 @@ export default class file {
             }),
             // 檔案大小
             limits: {
-                fileSize: 2000000,
+                fileSize: 100000 * configFile.size,
             },
             // 檔案格式
             fileFilter: (
@@ -51,7 +65,7 @@ export default class file {
             ) => {
                 const isPass: boolean = this.checkExtension(
                     file.originalname,
-                    this.format
+                    configFile.format
                 );
 
                 isPass === true
@@ -65,19 +79,21 @@ export default class file {
     }
 
     /**
-     * 取得路徑
+     * 取得完整路徑
      *
-     * @returns {string} 路徑
+     * @param {string} path 相對路徑
+     *
+     * @returns {string} 完整路徑
      */
-    private getPath(): string {
-        const path: string = "./storage/upload/temp";
+    private getFullPath(path: string): string {
+        const fullPath = Path.join(".", path);
 
         // 查無此路徑時建立路徑
-        if (FS.existsSync(path) === false) {
-            FS.mkdirSync(path, { recursive: true });
+        if (FS.existsSync(fullPath) === false) {
+            FS.mkdirSync(fullPath, { recursive: true });
         }
 
-        return path;
+        return fullPath;
     }
 
     /**
