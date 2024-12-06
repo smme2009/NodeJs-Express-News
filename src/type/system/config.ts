@@ -1,3 +1,3 @@
 export default interface Config {
-    [key: string]: string | number;
+    [key: string]: any;
 }
