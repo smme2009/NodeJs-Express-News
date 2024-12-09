@@ -28,6 +28,15 @@ export default class File extends Controller {
     public async save(): Promise<void> {
         const request: TypeFile = this.getRequest();
 
+        // 檢查檔案
+        const errorList: null | string[] = this.srcNewsFile.checkFile(request);
+
+        if (errorList !== null) {
+            const json: TypeJson = this.getJson("檔案格式錯誤", errorList);
+            this.response.status(400).json(json);
+            return;
+        }
+
         // 新增新聞檔案
         const data: null | TypeFile = await this.srcNewsFile.save(request);
 
