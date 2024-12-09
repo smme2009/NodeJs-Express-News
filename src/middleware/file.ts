@@ -38,7 +38,7 @@ export default class file {
             }),
             // 檔案大小
             limits: {
-                fileSize: 2000000,
+                fileSize: 20000000,
             },
         });
 
