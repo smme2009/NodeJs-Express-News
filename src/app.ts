@@ -60,5 +60,8 @@ app.use(RtBackend);
 // 加入前台路由
 app.use(RtFrontend);
 
+// 加入Public路由
+app.use("/public", Express.static(global.publicPath));
+
 // 開始監聽
 app.listen(process.env.APP_PORT);
