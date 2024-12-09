@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import MwAccount from "@/middleware/account";
 import RtLogin from "@/router/backend/admin/login";
 import RtAdmin from "@/router/backend/admin/admin";
-import RtFile from "@/router/backend/file/file";
+import RtNewsFile from "@/router/backend/news/file";
 import RtNewsType from "@/router/backend/news/type";
 import ConfigRole from "@/config/role";
 
@@ -25,8 +25,8 @@ router.use(
 // 管理者
 router.use(url, RtAdmin);
 
-// 檔案
-router.use(url, RtFile);
+// 新聞檔案
+router.use(url, RtNewsFile);
 
 // 新聞類型
 router.use(url, RtNewsType);

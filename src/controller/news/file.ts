@@ -2,11 +2,12 @@ import Controller from "@/controller/controller";
 import TypeJson from "@/type/system/json";
 import TypeFile from "@/type/data/file";
 import { Request, Response } from "express";
-import SrcFile from "@/service/file/file";
+import SrcNewsFile from "@/service/news/file";
 
-// 檔案
+// 新聞檔案
 export default class File extends Controller {
-    private srcFile: SrcFile;
+    // 新聞檔案Service
+    private srcNewsFile: SrcNewsFile;
 
     /**
      * 建構子
@@ -16,27 +17,27 @@ export default class File extends Controller {
      */
     constructor(request: Request, response: Response) {
         super(request, response);
-        this.srcFile = new SrcFile();
+        this.srcNewsFile = new SrcNewsFile();
     }
 
     /**
-     * 新增檔案資料
+     * 新增新聞檔案
      *
      * @returns {Promise<void>}
      */
-    public async insert(): Promise<void> {
+    public async save(): Promise<void> {
         const request: TypeFile = this.getRequest();
 
-        // 新增檔案資料
-        const data: null | TypeFile = await this.srcFile.insert(request);
+        // 新增新聞檔案
+        const data: null | TypeFile = await this.srcNewsFile.save(request);
 
         if (data === null) {
-            const json: TypeJson = this.getJson("新增檔案失敗");
+            const json: TypeJson = this.getJson("新增新聞檔案失敗");
             this.response.status(400).json(json);
             return;
         }
 
-        const json: TypeJson = this.getJson("成功新增檔案", data);
+        const json: TypeJson = this.getJson("成功新增新聞檔案", data);
         this.response.status(201).json(json);
     }
 
