@@ -1,11 +1,8 @@
-import TypeConfig from "@/type/system/config";
-import TypeJson from "@/type/system/json";
-import Multer, { FileFilterCallback } from "multer";
+import Multer from "multer";
 import { Request, Response, NextFunction } from "express";
 import Crypto from "crypto";
 import Path from "path";
-import FS from "fs";
-import ConfigFile from "@/config/file";
+import OS from "os";
 
 // 檔案
 export default class file {
@@ -19,19 +16,6 @@ export default class file {
         eResponse: Response,
         eNext: NextFunction
     ): void {
-        const type: string = eRequest.params.type;
-        const configFile: TypeConfig = ConfigFile[type];
-
-        // 檢查上傳類型
-        if (configFile === undefined) {
-            const json: TypeJson = {
-                message: "上傳類型錯誤",
-            };
-
-            eResponse.status(400).json(json);
-            return;
-        }
-
         // 設定套件
         const multer: Multer.Multer = Multer({
             storage: Multer.diskStorage({
@@ -41,8 +25,7 @@ export default class file {
                     file: Express.Multer.File,
                     callback
                 ) => {
-                    const fullPath: string = this.getFullPath(configFile.path);
-                    callback(null, fullPath);
+                    callback(null, OS.tmpdir());
                 },
                 // 檔案名稱
                 filename: (
@@ -55,45 +38,12 @@ export default class file {
             }),
             // 檔案大小
             limits: {
-                fileSize: 100000 * configFile.size,
-            },
-            // 檔案格式
-            fileFilter: (
-                eRequest: Request,
-                file: Express.Multer.File,
-                callback: FileFilterCallback
-            ) => {
-                const isPass: boolean = this.checkExtension(
-                    file.originalname,
-                    configFile.format
-                );
-
-                isPass === true
-                    ? callback(null, true)
-                    : callback(new Error("檔案格式錯誤"));
+                fileSize: 2000000,
             },
         });
 
         // 執行套件
         multer.single("file")(eRequest, eResponse, eNext);
-    }
-
-    /**
-     * 取得完整路徑
-     *
-     * @param {string} path 相對路徑
-     *
-     * @returns {string} 完整路徑
-     */
-    private getFullPath(path: string): string {
-        const fullPath = Path.join(".", path);
-
-        // 查無此路徑時建立路徑
-        if (FS.existsSync(fullPath) === false) {
-            FS.mkdirSync(fullPath, { recursive: true });
-        }
-
-        return fullPath;
     }
 
     /**
@@ -114,19 +64,5 @@ export default class file {
             .digest("hex");
 
         return `${hash}${extension}`;
-    }
-
-    /**
-     * 檢查檔案副檔名
-     *
-     * @param {string} fileName 檔案名稱
-     * @param {string[]} formatList 格式列表
-     *
-     * @returns {boolean} 是否通過
-     */
-    private checkExtension(fileName: string, formatList: string[]): boolean {
-        const extension: string = Path.extname(fileName).substring(1);
-
-        return formatList.includes(extension);
     }
 }
