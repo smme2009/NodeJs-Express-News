@@ -1,5 +1,6 @@
 import Express from "express";
 import Path from "path";
+import FS from "fs";
 import BodyParser from "body-parser";
 import Env from "dotenv";
 import RtBackend from "@/router/backend/index";
@@ -13,6 +14,21 @@ const app = Express();
 global.appPath = __dirname; // 取得app.js(ts)路徑
 global.basePath = Path.join(global.appPath, ".."); // 取得專案路徑
 global.storagePath = Path.join(global.basePath, "storage"); // storage路徑
+global.publicPath = Path.join(global.basePath, "public"); // public路徑
+
+// 建立公開檔案上傳資料夾
+const storagePublicPath: string = `${global.storagePath}/public`;
+
+if (FS.existsSync(storagePublicPath) === false) {
+    FS.mkdirSync(storagePublicPath);
+}
+
+// 建立連結符號
+const publicStoragePath: string = `${global.publicPath}/storage`;
+
+if (FS.existsSync(publicStoragePath) === false) {
+    FS.symlinkSync(storagePublicPath, publicStoragePath, "dir");
+}
 
 // 初始化env
 Env.config();
