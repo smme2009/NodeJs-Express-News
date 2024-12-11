@@ -13,8 +13,8 @@ Env.config();
 // 建立全域的系統相關路徑變數
 setGlobalPath();
 
-// 建立檔案系統相關路徑
-setFilePath();
+// 建立檔案資料夾的符號連結
+setFileLink();
 
 // 設定資料庫
 setDatabase();
@@ -55,29 +55,20 @@ function setGlobalPath(): void {
 }
 
 /**
- * 建立檔案系統相關路徑
+ * 建立檔案資料夾的符號連結
  *
  * @returns {void}
  */
-function setFilePath(): void {
-    // 建立公開檔案的上傳資料夾
-    const storagePublicPath: string = `${global.storagePath}/public`;
+function setFileLink(): void {
+    // 上傳資料夾
+    const uploadPath: string = `${global.storagePath}/public`;
 
-    if (FS.existsSync(storagePublicPath) === false) {
+    // 公開資料夾
+    const publicPath: string = `${global.publicPath}/storage`;
+
+    if (FS.existsSync(publicPath) === false) {
         try {
-            FS.mkdirSync(storagePublicPath, { recursive: true });
-            console.log("成功建立公開檔案上傳資料夾");
-        } catch (error: any) {
-            console.log("建立公開檔案上傳資料夾異常");
-        }
-    }
-
-    // 建立符號連結
-    const publicStoragePath: string = `${global.publicPath}/storage`;
-
-    if (FS.existsSync(publicStoragePath) === false) {
-        try {
-            FS.symlinkSync(storagePublicPath, publicStoragePath, "dir");
+            FS.symlinkSync(uploadPath, publicPath, "dir");
             console.log("成功建立符號連結");
         } catch (error: any) {
             console.log("建立符號連結異常");
