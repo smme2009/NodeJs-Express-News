@@ -38,8 +38,12 @@ app.use(RtFrontend);
 // 加入Public路由
 app.use("/public", Express.static(global.publicPath));
 
+const port: number = parseInt(process.env.APP_PORT);
+
 // 開始監聽
-app.listen(process.env.APP_PORT);
+app.listen(port, () => {
+    console.log(`已開始監聽${port}Port`);
+});
 
 /**
  * 建立全域的系統相關路徑變數
