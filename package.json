@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r dotenv/config -r tsconfig-paths/register --files src/app.ts",
+    "start": "NODE_ENV=development && nodemon -r dotenv/config -r tsconfig-paths/register --files src/app.ts",
     "build": "tsc && tsc-alias",
     "watch": "tsc --watch",
     "serve": "npx pm2-runtime start ecosystem.config.js --env=production"
