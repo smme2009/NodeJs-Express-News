@@ -7,7 +7,7 @@
     "start": "nodemon -r dotenv/config -r tsconfig-paths/register --files src/app.ts",
     "build": "tsc && tsc-alias",
     "watch": "tsc --watch",
-    "serve": "pm2-runtime start ecosystem.config.js --env=production"
+    "serve": "npx pm2-runtime start ecosystem.config.js --env=production"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.3",
     "nodemon": "^3.1.7",
+    "pm2": "^5.4.3",
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "sequelize": "^6.37.4",
