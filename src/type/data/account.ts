@@ -1,6 +1,7 @@
 export default interface Account {
-    accountId: number;
+    accountId?: number;
     account: string;
+    password?: string;
     name: string;
     roleId?: number;
 }
