@@ -1,10 +1,11 @@
-const path = require('path');
+const Path = require('path');
 
-const databasePath = "src/database";
+const basePath = __dirname;
+const databasePath = Path.join(basePath, "src/database");
 
 module.exports = {
-    "config": path.resolve(databasePath, "database.js"),
-    "models-path": path.resolve(databasePath, "model"),
-    "seeders-path": path.resolve(databasePath, "seeder"),
-    "migrations-path": path.resolve(databasePath, "migration"),
+    "config": Path.resolve(basePath, "database.config.js"),
+    "models-path": Path.resolve(databasePath, "model"),
+    "seeders-path": Path.resolve(databasePath, "seeder"),
+    "migrations-path": Path.resolve(databasePath, "migration"),
 };

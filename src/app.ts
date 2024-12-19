@@ -5,7 +5,7 @@ import BodyParser from "body-parser";
 import Env from "dotenv";
 import RtBackend from "@/router/backend/index";
 import RtFrontend from "@/router/frontend/index";
-import { Sequelize } from "sequelize-typescript";
+import Database from "@/database/database";
 
 // 初始化env
 Env.config();
@@ -16,8 +16,8 @@ setGlobalPath();
 // 建立檔案資料夾的符號連結
 setFileLink();
 
-// 設定資料庫
-setDatabase();
+// 初始化資料庫
+Database.init();
 
 // 初始化框架
 const app = Express();
@@ -38,8 +38,12 @@ app.use(RtFrontend);
 // 加入Public路由
 app.use("/public", Express.static(global.publicPath));
 
+const port: number = parseInt(process.env.APP_PORT);
+
 // 開始監聽
-app.listen(process.env.APP_PORT);
+app.listen(port, () => {
+    console.log(`已開始監聽${port}Port`);
+});
 
 /**
  * 建立全域的系統相關路徑變數
@@ -74,25 +78,4 @@ function setFileLink(): void {
             console.log("建立符號連結異常");
         }
     }
-}
-
-/**
- * 設定資料庫
- *
- * @returns {void}
- */
-function setDatabase(): void {
-    // 初始化資料庫
-    const sequelize: Sequelize = new Sequelize(
-        process.env.DB_DATABASE!,
-        process.env.DB_USERNAME!,
-        process.env.DB_PASSWORD!,
-        {
-            host: process.env.DB_HOST!,
-            dialect: "mysql",
-        }
-    );
-
-    // 加入Model
-    sequelize.addModels([__dirname + "/database/model"]);
 }

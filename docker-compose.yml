@@ -1,0 +1,58 @@
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: localhost
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    healthcheck: 
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"] 
+      interval: 10s 
+      timeout: 10s 
+      retries: 5
+    command: [
+      "mysqld", 
+      "--character-set-server=utf8mb4", 
+      "--collation-server=utf8mb4_general_ci"
+    ]
+    volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker-data/mysql:/var/lib/mysql
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    healthcheck: 
+      test: ["CMD", "redis-cli", "ping"] 
+      interval: 10s 
+      timeout: 10s 
+      retries: 5
+  node:
+    image: node
+    container_name: node
+    ports:
+      - 3000:3000
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    working_dir: /var/www/html
+    entrypoint: [ 'sh', './docker/node/init.sh' ]
+    volumes:
+      - ./:/var/www/html
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 80:80
+    depends_on:
+      - node
+    volumes:
+      - ./docker/nginx/news.conf:/etc/nginx/conf.d/news.conf
