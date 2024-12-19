@@ -15,7 +15,13 @@ services:
       interval: 10s 
       timeout: 10s 
       retries: 5
+    command: [
+      "mysqld", 
+      "--character-set-server=utf8mb4", 
+      "--collation-server=utf8mb4_general_ci"
+    ]
     volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./docker-data/mysql:/var/lib/mysql
   redis:
     image: redis
