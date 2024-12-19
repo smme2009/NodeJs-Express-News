@@ -67,31 +67,26 @@ export default class Account {
     public async insert(data: TypeAccount): Promise<null | ModelAccount> {
         let resultModel: null | ModelAccount = null;
 
-        const transaction = await Database.get().transaction();
-
         try {
-            const model: ModelAccount = ModelAccount.build();
+            await Database.get().transaction(async () => {
+                const model: ModelAccount = ModelAccount.build();
 
-            // 新增帳號
-            resultModel = await this.saveModel(model, data);
+                // 新增帳號
+                resultModel = await this.saveModel(model, data);
 
-            if (resultModel === null) {
-                await transaction.rollback();
-                return null;
-            }
+                if (resultModel === null) {
+                    throw new Error('新增帳號失敗');
+                }
 
-            // 新增帳號的角色
-            const isInsert: boolean = await this.insertRole(resultModel);
+                // 新增帳號的角色
+                const isInsert: boolean = await this.insertRole(resultModel);
 
-            if (isInsert === false) {
-                await transaction.rollback();
-                return null;
-            }
-
-            await transaction.commit();
+                if (isInsert === false) {
+                    throw new Error('新增帳號的角色失敗');
+                }
+            });
         } catch (error: any) {
-            console.log("新增帳號失敗", error);
-            await transaction.rollback();
+            console.log(error);
             return null;
         }
 
