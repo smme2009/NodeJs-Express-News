@@ -5,7 +5,7 @@ import BodyParser from "body-parser";
 import Env from "dotenv";
 import RtBackend from "@/router/backend/index";
 import RtFrontend from "@/router/frontend/index";
-import { Sequelize } from "sequelize-typescript";
+import Database from "@/database/database";
 
 // 初始化env
 Env.config();
@@ -13,11 +13,11 @@ Env.config();
 // 建立全域的系統相關路徑變數
 setGlobalPath();
 
-// 建立檔案系統相關路徑
-setFilePath();
+// 建立檔案資料夾的符號連結
+setFileLink();
 
-// 設定資料庫
-setDatabase();
+// 初始化資料庫
+Database.init();
 
 // 初始化框架
 const app = Express();
@@ -38,8 +38,12 @@ app.use(RtFrontend);
 // 加入Public路由
 app.use("/public", Express.static(global.publicPath));
 
+const port: number = parseInt(process.env.APP_PORT);
+
 // 開始監聽
-app.listen(process.env.APP_PORT);
+app.listen(port, () => {
+    console.log(`已開始監聽${port}Port`);
+});
 
 /**
  * 建立全域的系統相關路徑變數
@@ -55,53 +59,23 @@ function setGlobalPath(): void {
 }
 
 /**
- * 建立檔案系統相關路徑
+ * 建立檔案資料夾的符號連結
  *
  * @returns {void}
  */
-function setFilePath(): void {
-    // 建立公開檔案的上傳資料夾
-    const storagePublicPath: string = `${global.storagePath}/public`;
+function setFileLink(): void {
+    // 上傳資料夾
+    const uploadPath: string = `${global.storagePath}/public`;
 
-    if (FS.existsSync(storagePublicPath) === false) {
+    // 公開資料夾
+    const publicPath: string = `${global.publicPath}/storage`;
+
+    if (FS.existsSync(publicPath) === false) {
         try {
-            FS.mkdirSync(storagePublicPath, { recursive: true });
-            console.log("成功建立公開檔案上傳資料夾");
-        } catch (error: any) {
-            console.log("建立公開檔案上傳資料夾異常");
-        }
-    }
-
-    // 建立符號連結
-    const publicStoragePath: string = `${global.publicPath}/storage`;
-
-    if (FS.existsSync(publicStoragePath) === false) {
-        try {
-            FS.symlinkSync(storagePublicPath, publicStoragePath, "dir");
+            FS.symlinkSync(uploadPath, publicPath, "dir");
             console.log("成功建立符號連結");
         } catch (error: any) {
             console.log("建立符號連結異常");
         }
     }
-}
-
-/**
- * 設定資料庫
- *
- * @returns {void}
- */
-function setDatabase(): void {
-    // 初始化資料庫
-    const sequelize: Sequelize = new Sequelize(
-        process.env.DB_DATABASE!,
-        process.env.DB_USERNAME!,
-        process.env.DB_PASSWORD!,
-        {
-            host: process.env.DB_HOST!,
-            dialect: "mysql",
-        }
-    );
-
-    // 加入Model
-    sequelize.addModels([__dirname + "/database/model"]);
 }
