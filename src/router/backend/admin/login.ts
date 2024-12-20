@@ -6,8 +6,8 @@ const router: Router = Router();
 const roleId: number = ConfigRole.admin as number;
 
 // 登入
-router.post("/login", (eRequest: Request, eResponse: Response) => {
-    new CtrlAccount(eRequest, eResponse, roleId).login();
+router.post("/login", (request: Request, response: Response) => {
+    new CtrlAccount(roleId).login(request, response);
 });
 
 export default router;

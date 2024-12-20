@@ -8,11 +8,11 @@ const url: string = "/news/file";
 // 檔案上傳
 router.post(
     url,
-    (eRequest: Request, eResponse: Response, eNext: NextFunction) => {
-        new MwFile().handle(eRequest, eResponse, eNext);
+    (request: Request, response: Response, next: NextFunction) => {
+        new MwFile().handle(request, response, next);
     },
-    (eRequest: Request, eResponse: Response) => {
-        new CtrlNewsFile(eRequest, eResponse).save();
+    (request: Request, response: Response) => {
+        new CtrlNewsFile().save(request, response);
     }
 );
 

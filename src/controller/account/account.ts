@@ -12,23 +12,27 @@ export default class Account extends Controller {
     /**
      * 建構子
      *
-     * @param {Request} request 框架Request
-     * @param {Response} response 框架Response
      * @param {number} roleId 角色ID
      */
-    constructor(request: Request, response: Response, roleId: number) {
-        super(request, response);
+    constructor(roleId: number) {
+        super();
         this.srcAccount = new SrcAccount(roleId);
     }
 
     /**
      * 登入
      *
-     * @returns {Promise<void>}
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     *
+     * @returns {Promise<Response>}
      */
-    public async login(): Promise<void> {
-        const account: string = this.request.body.account;
-        const password: string = this.request.body.password;
+    public async login(
+        request: Request,
+        response: Response
+    ): Promise<Response> {
+        const account: string = request.body.account;
+        const password: string = request.body.password;
 
         // 登入
         const data: null | TypeAccount = await this.srcAccount.login(
@@ -38,8 +42,7 @@ export default class Account extends Controller {
 
         if (data === null) {
             const json: TypeJson = this.getJson("帳號或密碼錯誤");
-            this.response.status(401).json(json);
-            return;
+            return response.status(401).json(json);
         }
 
         // 取得JWT Token
@@ -47,21 +50,26 @@ export default class Account extends Controller {
 
         if (jwtToken === null) {
             const json: TypeJson = this.getJson("取得JWT Token失敗");
-            this.response.status(401).json(json);
-            return;
+            return response.status(401).json(json);
         }
 
         const json: TypeJson = this.getJson("登入成功", { jwtToken: jwtToken });
-        this.response.status(200).json(json);
+        return response.status(200).json(json);
     }
 
     /**
      * 取得帳號資訊
      *
-     * @returns {Promise<void>}
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     *
+     * @returns {Promise<Response>}
      */
-    public async getInfo(): Promise<void> {
-        const accountId: number = this.request.accountId!;
+    public async getInfo(
+        request: Request,
+        response: Response
+    ): Promise<Response> {
+        const accountId: number = request.accountId!;
 
         // 取得帳號資訊
         const data: null | TypeAccount = await this.srcAccount.getInfo(
@@ -70,32 +78,36 @@ export default class Account extends Controller {
 
         if (data === null) {
             const json: TypeJson = this.getJson("取得帳號資訊失敗");
-            this.response.status(400).json(json);
-            return;
+            return response.status(400).json(json);
         }
 
         const json: TypeJson = this.getJson("成功取得帳號資訊", data);
-        this.response.status(200).json(json);
+        return response.status(200).json(json);
     }
 
     /**
      * 登出
      *
-     * @returns {Promise<void>}
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     *
+     * @returns {Promise<Response>}
      */
-    public async logout(): Promise<void> {
-        const jwtToken: string = this.request.jwtToken!;
+    public async logout(
+        request: Request,
+        response: Response
+    ): Promise<Response> {
+        const jwtToken: string = request.jwtToken!;
 
         // 登出
         const isDelete: boolean = await this.srcAccount.logout(jwtToken);
 
         if (isDelete === false) {
             const json: TypeJson = this.getJson("登出失敗");
-            this.response.status(400).json(json);
-            return;
+            return response.status(400).json(json);
         }
 
         const json: TypeJson = this.getJson("成功登出");
-        this.response.status(200).json(json);
+        return response.status(200).json(json);
     }
 }
