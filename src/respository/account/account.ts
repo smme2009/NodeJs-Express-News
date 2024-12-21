@@ -75,14 +75,14 @@ export default class Account {
                 resultModel = await this.saveModel(model, data);
 
                 if (resultModel === null) {
-                    throw new Error('新增帳號失敗');
+                    throw new Error("新增帳號失敗");
                 }
 
                 // 新增帳號的角色
                 const isInsert: boolean = await this.insertRole(resultModel);
 
                 if (isInsert === false) {
-                    throw new Error('新增帳號的角色失敗');
+                    throw new Error("新增帳號的角色失敗");
                 }
             });
         } catch (error: any) {
@@ -108,9 +108,9 @@ export default class Account {
         let resultModel: null | ModelAccount = null;
 
         try {
-            model.account = data.account;
+            model.account = data.account!;
             model.password = data.password!;
-            model.name = data.name;
+            model.name = data.name!;
             model.status = 1;
             resultModel = await model.save();
         } catch (error: any) {

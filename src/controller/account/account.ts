@@ -69,7 +69,7 @@ export default class Account extends Controller {
         request: Request,
         response: Response
     ): Promise<Response> {
-        const accountId: number = request.accountId!;
+        const accountId: number = request.account!.accountId!;
 
         // 取得帳號資訊
         const data: null | TypeAccount = await this.srcAccount.getInfo(
@@ -97,7 +97,7 @@ export default class Account extends Controller {
         request: Request,
         response: Response
     ): Promise<Response> {
-        const jwtToken: string = request.jwtToken!;
+        const jwtToken: string = request.account!.jwtToken!;
 
         // 登出
         const isDelete: boolean = await this.srcAccount.logout(jwtToken);
