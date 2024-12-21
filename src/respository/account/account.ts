@@ -5,18 +5,6 @@ import ModelRole from "@/database/model/role";
 
 // 帳號
 export default class Account {
-    // 角色ID
-    private roleId: number;
-
-    /**
-     * 建構子
-     *
-     * @param {number} roleId 角色ID
-     */
-    constructor(roleId: number) {
-        this.roleId = roleId;
-    }
-
     /**
      * 取得帳號(帳號)
      *
@@ -30,10 +18,7 @@ export default class Account {
                 status: true,
                 account: account,
             },
-            include: {
-                model: ModelRole,
-                where: { roleId: this.roleId },
-            },
+            include: ModelRole,
         });
 
         return model;
@@ -61,10 +46,14 @@ export default class Account {
      * 新增帳號
      *
      * @param {TypeAccount} data 資料
+     * @param {number} roleId 角色ID
      *
      * @returns {Promise<null | ModelAccount>} Model
      */
-    public async insert(data: TypeAccount): Promise<null | ModelAccount> {
+    public async insert(
+        data: TypeAccount,
+        roleId: number
+    ): Promise<null | ModelAccount> {
         let resultModel: null | ModelAccount = null;
 
         try {
@@ -79,7 +68,10 @@ export default class Account {
                 }
 
                 // 新增帳號的角色
-                const isInsert: boolean = await this.insertRole(resultModel);
+                const isInsert: boolean = await this.insertRole(
+                    resultModel,
+                    roleId
+                );
 
                 if (isInsert === false) {
                     throw new Error("新增帳號的角色失敗");
@@ -124,14 +116,16 @@ export default class Account {
      * 新增帳號角色
      *
      * @param {ModelAccount} model Model
+     * @param {number} roleId 角色ID
      *
      * @returns {Promise<boolean>} 是否新增成功
      */
-    private async insertRole(model: ModelAccount): Promise<boolean> {
+    private async insertRole(
+        model: ModelAccount,
+        roleId: number
+    ): Promise<boolean> {
         // 取得角色model
-        const modelRole: null | ModelRole = await ModelRole.findByPk(
-            this.roleId
-        );
+        const modelRole: null | ModelRole = await ModelRole.findByPk(roleId);
 
         if (modelRole === null) {
             return false;

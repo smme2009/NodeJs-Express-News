@@ -6,17 +6,14 @@ import SrcAccount from "@/service/account/account";
 
 // 帳號
 export default class Account extends Controller {
-    // 帳號Service
-    private srcAccount: SrcAccount;
-
     /**
      * 建構子
-     *
-     * @param {number} roleId 角色ID
      */
-    constructor(roleId: number) {
+    constructor(
+        // 帳號Service
+        private srcAccount: SrcAccount = new SrcAccount()
+    ) {
         super();
-        this.srcAccount = new SrcAccount(roleId);
     }
 
     /**
@@ -24,12 +21,14 @@ export default class Account extends Controller {
      *
      * @param {Request} request 框架Request
      * @param {Response} response 框架Response
+     * @param {number} roleId 角色ID
      *
      * @returns {Promise<Response>}
      */
     public async login(
         request: Request,
-        response: Response
+        response: Response,
+        roleId: number
     ): Promise<Response> {
         const account: string = request.body.account;
         const password: string = request.body.password;
@@ -37,7 +36,8 @@ export default class Account extends Controller {
         // 登入
         const data: null | TypeAccount = await this.srcAccount.login(
             account,
-            password
+            password,
+            roleId
         );
 
         if (data === null) {
