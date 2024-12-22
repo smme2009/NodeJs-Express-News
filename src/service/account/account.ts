@@ -61,7 +61,11 @@ export default class Account {
             return null;
         }
 
-        return this.setData(model);
+        // 設定資料
+        const data: TypeAccount = this.setData(model);
+        data.roleId = roleId;
+
+        return data;
     }
 
     /**
