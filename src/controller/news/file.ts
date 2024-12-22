@@ -6,59 +6,58 @@ import SrcNewsFile from "@/service/news/file";
 
 // 新聞檔案
 export default class File extends Controller {
-    // 新聞檔案Service
-    private srcNewsFile: SrcNewsFile;
-
     /**
      * 建構子
-     *
-     * @param {Request} request 框架Request
-     * @param {Response} response 框架Response
      */
-    constructor(request: Request, response: Response) {
-        super(request, response);
-        this.srcNewsFile = new SrcNewsFile();
+    constructor(
+        // 新聞檔案Service
+        private srcNewsFile: SrcNewsFile = new SrcNewsFile()
+    ) {
+        super();
     }
 
     /**
      * 新增新聞檔案
      *
-     * @returns {Promise<void>}
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     *
+     * @returns {Promise<Response>}
      */
-    public async save(): Promise<void> {
-        const request: TypeFile = this.getRequest();
+    public async save(request: Request, response: Response): Promise<Response> {
+        const fileInfo: TypeFile = this.getFileInfo(request);
 
         // 檢查檔案
-        const errorList: null | string[] = this.srcNewsFile.checkFile(request);
+        const errorList: null | string[] = this.srcNewsFile.checkFile(fileInfo);
 
         if (errorList !== null) {
             const json: TypeJson = this.getJson("檔案格式錯誤", errorList);
-            this.response.status(400).json(json);
-            return;
+            return response.status(400).json(json);
         }
 
         // 新增新聞檔案
-        const data: null | TypeFile = await this.srcNewsFile.save(request);
+        const data: null | TypeFile = await this.srcNewsFile.save(fileInfo);
 
         if (data === null) {
             const json: TypeJson = this.getJson("新增新聞檔案失敗");
-            this.response.status(400).json(json);
-            return;
+            return response.status(400).json(json);
         }
 
         const json: TypeJson = this.getJson("成功新增新聞檔案", data);
-        this.response.status(201).json(json);
+        return response.status(201).json(json);
     }
 
     /**
-     * 取得Request
+     * 取得檔案資訊
      *
-     * @returns {TypeFile} Request
+     * @param {Request} request 框架Request
+     *
+     * @returns {TypeFile} 檔案資訊
      */
-    private getRequest(): TypeFile {
-        const file: Express.Multer.File = this.request.file!;
+    private getFileInfo(request: Request): TypeFile {
+        const file: Express.Multer.File = request.file!;
 
-        const request: TypeFile = {
+        const fileInfo: TypeFile = {
             name: file.originalname,
             hashName: file.filename,
             path: file.path,
@@ -66,6 +65,6 @@ export default class File extends Controller {
             size: file.size,
         };
 
-        return request;
+        return fileInfo;
     }
 }

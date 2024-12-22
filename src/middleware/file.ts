@@ -9,19 +9,23 @@ export default class file {
     /**
      * 中介層處理
      *
-     * @returns {RequestHandler}
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     * @param {NextFunction} next 框架Next
+     *
+     * @returns {void}
      */
     public handle(
-        eRequest: Request,
-        eResponse: Response,
-        eNext: NextFunction
+        request: Request,
+        response: Response,
+        next: NextFunction
     ): void {
         // 設定套件
         const multer: Multer.Multer = Multer({
             storage: Multer.diskStorage({
                 // 檔案路徑
                 destination: (
-                    eRequest: Request,
+                    request: Request,
                     file: Express.Multer.File,
                     callback
                 ) => {
@@ -29,7 +33,7 @@ export default class file {
                 },
                 // 檔案名稱
                 filename: (
-                    eRequest: Request,
+                    request: Request,
                     file: Express.Multer.File,
                     callback
                 ) => {
@@ -43,7 +47,7 @@ export default class file {
         });
 
         // 執行套件
-        multer.single("file")(eRequest, eResponse, eNext);
+        multer.single("file")(request, response, next);
     }
 
     /**

@@ -2,22 +2,17 @@ import { createClient, RedisClientType } from "redis";
 
 // Redis工具
 export default class Redis {
-    // Redis套件
-    private redis: RedisClientType;
-
     /**
      * 建構子
      */
-    constructor() {
-        const host: string = process.env.REDIS_HOST;
-        const port: string = process.env.REDIS_PORT;
-        const url: string = `redis://${host}:${port}`;
-
+    constructor(
+        // Redis套件
+        private redis: RedisClientType = createClient({
+            url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+        })
+    ) {
         // 連線
-        const redis: RedisClientType = createClient({ url: url });
-        redis.connect();
-
-        this.redis = redis;
+        this.redis.connect();
     }
 
     /**
