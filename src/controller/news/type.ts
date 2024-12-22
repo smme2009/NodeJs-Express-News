@@ -8,15 +8,14 @@ import SrcNewsType from "@/service/news/type";
 
 // 新聞類型
 export default class Admin extends Controller {
-    // 新聞類型Service
-    private srcNewsType: SrcNewsType;
-
     /**
      * 建構子
      */
-    constructor() {
+    constructor(
+        // 新聞類型Service
+        private srcNewsType: SrcNewsType = new SrcNewsType()
+    ) {
         super();
-        this.srcNewsType = new SrcNewsType();
     }
 
     /**

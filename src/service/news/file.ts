@@ -6,19 +6,16 @@ import ConfigFileFormat from "@/config/fileFormat";
 
 // 新聞檔案
 export default class File {
-    // 檔案Respository
-    private repoFile: RepoFile;
-
-    // 檔案工具
-    private toolFile: ToolFile;
-
     /**
      * 建構子
      */
-    constructor() {
-        this.repoFile = new RepoFile();
-        this.toolFile = new ToolFile("news");
-    }
+    constructor(
+        // 檔案Respository
+        private repoFile: RepoFile = new RepoFile(),
+
+        // 檔案工具
+        private toolFile: ToolFile = new ToolFile()
+    ) {}
 
     /**
      * 檢查檔案
@@ -63,7 +60,7 @@ export default class File {
      */
     public async save(data: TypeFile): Promise<null | TypeFile> {
         // 儲存檔案
-        const filePath: null | string = this.toolFile.save(data);
+        const filePath: null | string = this.toolFile.save("news", data);
 
         if (filePath === null) {
             return null;

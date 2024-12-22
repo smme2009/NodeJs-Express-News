@@ -6,15 +6,14 @@ import SrcNewsFile from "@/service/news/file";
 
 // 新聞檔案
 export default class File extends Controller {
-    // 新聞檔案Service
-    private srcNewsFile: SrcNewsFile;
-
     /**
      * 建構子
      */
-    constructor() {
+    constructor(
+        // 新聞檔案Service
+        private srcNewsFile: SrcNewsFile = new SrcNewsFile()
+    ) {
         super();
-        this.srcNewsFile = new SrcNewsFile();
     }
 
     /**

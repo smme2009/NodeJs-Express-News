@@ -7,25 +7,21 @@ import ToolRedis from "@/tool/redis";
 
 // 帳號驗證
 export default class Account {
-    // JWT工具
-    private toolJwt: ToolJwt;
-
-    // Redis工具
-    private toolRedis: ToolRedis;
-
-    // 角色ID
-    private roleId: number;
-
     /**
      * 建構子
      *
      * @param {number} roleId 角色ID
      */
-    constructor(roleId: number) {
-        this.toolJwt = new ToolJwt();
-        this.toolRedis = new ToolRedis();
-        this.roleId = roleId;
-    }
+    constructor(
+        // 角色ID
+        private roleId: number,
+
+        // JWT工具
+        private toolJwt: ToolJwt = new ToolJwt(),
+
+        // Redis工具
+        private toolRedis: ToolRedis = new ToolRedis()
+    ) {}
 
     // 中介層處理
     public async handle(
