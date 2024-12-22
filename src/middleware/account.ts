@@ -11,6 +11,8 @@ export default class Account {
      * 建構子
      *
      * @param {number} roleId 角色ID
+     * @param {ToolJwt} toolJwt JWT工具
+     * @param {ToolRedis} toolRedis Redis工具
      */
     constructor(
         // 角色ID
@@ -23,7 +25,15 @@ export default class Account {
         private toolRedis: ToolRedis = new ToolRedis()
     ) {}
 
-    // 中介層處理
+    /**
+     * 中介層處理
+     *
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     * @param {NextFunction} next 框架Next
+     *
+     * @returns {Promise<void>}
+     */
     public async handle(
         request: Request,
         response: Response,
