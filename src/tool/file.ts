@@ -3,32 +3,26 @@ import Path from "path";
 import FS from "fs";
 
 export default class File {
-    // 路徑
-    private path: string;
-
-    /**
-     * 建構子
-     *
-     * @param {string} path 路徑
-     * @param {boolean} isPublic 檔案是否公開
-     */
-    constructor(path: string, isPublic: boolean = true) {
-        const folder: string = isPublic ? "public" : "private";
-        this.path = Path.join(global.storagePath, folder, path);
-    }
-
     /**
      * 儲存檔案
      *
+     * @param {string} path 路徑
      * @param {TypeFile} fileInfo 檔案資訊
+     * @param {boolean} isPublic 檔案是否公開
      *
      * @returns {null | string} 檔案路徑
      */
-    public save(fileInfo: TypeFile): null | string {
-        const filePath: string = Path.join(this.path, fileInfo.hashName);
+    public save(
+        path: string,
+        fileInfo: TypeFile,
+        isPublic: boolean = true
+    ): null | string {
+        const folder: string = isPublic ? "public" : "private";
+        const fullPath: string = Path.join(global.storagePath, folder, path);
+        const filePath: string = Path.join(fullPath, fileInfo.hashName);
 
         // 設定路徑
-        if (this.setPath(this.path) === false) {
+        if (this.setPath(fullPath) === false) {
             return null;
         }
 

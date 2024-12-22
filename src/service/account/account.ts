@@ -2,46 +2,39 @@ import TypeAccount from "@/type/data/account";
 import Bcrypt from "bcrypt";
 import RepoAccount from "@/respository/account/account";
 import ModelAccount from "@/database/model/account";
+import ModelRole from "@/database/model/role";
 import ToolJwt from "@/tool/jwt";
 import ToolRedis from "@/tool/redis";
 
 // 帳號
 export default class Account {
-    // 帳號Respository
-    private repoAccount: RepoAccount;
-
-    // JWT工具
-    private toolJwt: ToolJwt;
-
-    // Redis工具
-    private toolRedis: ToolRedis;
-
-    // 角色ID
-    private roleId: number;
-
     /**
      * 建構子
-     *
-     * @param {number} roleId 角色ID
      */
-    constructor(roleId: number) {
-        this.repoAccount = new RepoAccount(roleId);
-        this.toolJwt = new ToolJwt();
-        this.toolRedis = new ToolRedis();
-        this.roleId = roleId;
-    }
+    constructor(
+        // 帳號Respository
+        private repoAccount: RepoAccount = new RepoAccount(),
+
+        // JWT工具
+        private toolJwt: ToolJwt = new ToolJwt(),
+
+        // Redis工具
+        private toolRedis: ToolRedis = new ToolRedis()
+    ) {}
 
     /**
      * 登入
      *
      * @param {string} account 帳號
      * @param {string} password 密碼
+     * @param {number} roleId 角色ID
      *
      * @returns {Promise<null | TypeAccount>} 帳號資料
      */
     public async login(
         account: string,
-        password: string
+        password: string,
+        roleId: number
     ): Promise<null | TypeAccount> {
         // 透過帳號取得資料
         const model: null | ModelAccount = await this.repoAccount.getByAccount(
@@ -59,7 +52,20 @@ export default class Account {
             return null;
         }
 
-        return this.setData(model);
+        // 檢查權限
+        const hasRole: undefined | ModelRole = model.role.find(
+            (item: ModelRole) => item.roleId === roleId
+        );
+
+        if (hasRole === undefined) {
+            return null;
+        }
+
+        // 設定資料
+        const data: TypeAccount = this.setData(model);
+        data.roleId = roleId;
+
+        return data;
     }
 
     /**
@@ -128,7 +134,6 @@ export default class Account {
             accountId: model.accountId,
             account: model.account,
             name: model.name,
-            roleId: this.roleId,
         };
 
         return data;

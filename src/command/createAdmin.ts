@@ -14,7 +14,7 @@ Env.config();
 Database.init();
 
 // 初始化Respository
-const repoAccount: RepoAccount = new RepoAccount(configRole.admin);
+const repoAccount: RepoAccount = new RepoAccount();
 
 // 設定command
 program
@@ -50,7 +50,7 @@ const data: TypeAccount = {
 
 // 新增管理員
 repoAccount
-    .insert(data)
+    .insert(data, configRole.admin)
     .then((modelAccount: null | ModelAccount) => {
         const message: string = modelAccount === null ? "失敗" : "成功";
         console.log(`新增管理員${message}`);

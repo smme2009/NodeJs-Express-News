@@ -1,4 +1,5 @@
 import TypeJson from "@/type/system/json";
+import TypeAccount from "@/type/data/account";
 import { Request, Response, NextFunction } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import ToolJwt from "@/tool/jwt";
@@ -6,40 +7,46 @@ import ToolRedis from "@/tool/redis";
 
 // 帳號驗證
 export default class Account {
-    // JWT工具
-    private toolJwt: ToolJwt;
-
-    // Redis工具
-    private toolRedis: ToolRedis;
-
-    // 角色ID
-    private roleId: number;
-
     /**
      * 建構子
      *
      * @param {number} roleId 角色ID
+     * @param {ToolJwt} toolJwt JWT工具
+     * @param {ToolRedis} toolRedis Redis工具
      */
-    constructor(roleId: number) {
-        this.toolJwt = new ToolJwt();
-        this.toolRedis = new ToolRedis();
-        this.roleId = roleId;
-    }
+    constructor(
+        // 角色ID
+        private roleId: number,
 
-    // 中介層處理
+        // JWT工具
+        private toolJwt: ToolJwt = new ToolJwt(),
+
+        // Redis工具
+        private toolRedis: ToolRedis = new ToolRedis()
+    ) {}
+
+    /**
+     * 中介層處理
+     *
+     * @param {Request} request 框架Request
+     * @param {Response} response 框架Response
+     * @param {NextFunction} next 框架Next
+     *
+     * @returns {Promise<void>}
+     */
     public async handle(
-        eRequest: Request,
-        eResponse: Response,
-        eNext: NextFunction
+        request: Request,
+        response: Response,
+        next: NextFunction
     ): Promise<void> {
-        const auth: undefined | string = eRequest.headers.authorization;
+        const auth: undefined | string = request.headers.authorization;
 
         if (auth === undefined) {
             const json: TypeJson = {
                 message: "查無JWT Token",
             };
 
-            eResponse.status(401).json(json);
+            response.status(401).json(json);
             return;
         }
 
@@ -55,7 +62,7 @@ export default class Account {
                 message: "JWT Token已失效",
             };
 
-            eResponse.status(401).json(json);
+            response.status(401).json(json);
             return;
         }
 
@@ -67,7 +74,7 @@ export default class Account {
                 message: "JWT Token驗證失敗",
             };
 
-            eResponse.status(401).json(json);
+            response.status(401).json(json);
             return;
         }
 
@@ -79,14 +86,18 @@ export default class Account {
                 message: "身份驗證失敗",
             };
 
-            eResponse.status(401).json(json);
+            response.status(401).json(json);
             return;
         }
 
-        // 設定Request
-        eRequest.accountId = data.accountId;
-        eRequest.jwtToken = jwtToken;
+        const account: TypeAccount = {
+            accountId: data.accountId,
+            jwtToken: jwtToken,
+        };
 
-        eNext();
+        // 設定Request
+        request.account = account;
+
+        next();
     }
 }
