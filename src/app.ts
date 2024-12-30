@@ -17,7 +17,7 @@ setGlobalPath();
 setFileLink();
 
 // 初始化資料庫
-Database.init();
+Database.getInstance();
 
 // 初始化框架
 const app = Express();

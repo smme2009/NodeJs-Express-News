@@ -57,7 +57,7 @@ export default class Account {
         let resultModel: null | ModelAccount = null;
 
         try {
-            await Database.get().transaction(async () => {
+            await Database.getInstance().transaction(async () => {
                 const model: ModelAccount = ModelAccount.build();
 
                 // 新增帳號
