@@ -6,9 +6,16 @@ import RtNewsFile from "@/router/backend/news/file";
 import RtNewsType from "@/router/backend/news/type";
 import ConfigRole from "@/config/role";
 
+// 路由
 const router: Router = Router();
+
+// 路徑
 const url: string = "/api/backend";
+
+// 角色ID
 const roleId: number = ConfigRole.admin as number;
+
+// 帳號驗證中介層
 const mwAccount: MwAccount = new MwAccount(roleId);
 
 // 登入
