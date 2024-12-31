@@ -6,6 +6,7 @@ import Env from "dotenv";
 import RtBackend from "@/router/backend/index";
 import RtFrontend from "@/router/frontend/index";
 import Database from "@/database/database";
+import ToolRedis from "@/tool/redis";
 
 // 初始化env
 Env.config();
@@ -18,6 +19,9 @@ setFileLink();
 
 // 初始化資料庫
 Database.getInstance();
+
+// 初始化Redis
+ToolRedis.getInstance();
 
 // 初始化框架
 const app = Express();
