@@ -11,14 +11,10 @@ export default class Account {
      * 建構子
      *
      * @param {number} roleId 角色ID
-     * @param {ToolJwt} toolJwt JWT工具
      */
     constructor(
         // 角色ID
-        private roleId: number,
-
-        // JWT工具
-        private toolJwt: ToolJwt = new ToolJwt()
+        private roleId: number
     ) {}
 
     /**
@@ -63,7 +59,7 @@ export default class Account {
         }
 
         // 驗證JWT Token
-        const data: null | JwtPayload = this.toolJwt.decode(jwtToken);
+        const data: null | JwtPayload = ToolJwt.decode(jwtToken);
 
         if (data === null) {
             const json: TypeJson = {

@@ -13,10 +13,7 @@ export default class Account {
      */
     constructor(
         // 帳號Respository
-        private repoAccount: RepoAccount = new RepoAccount(),
-
-        // JWT工具
-        private toolJwt: ToolJwt = new ToolJwt()
+        private repoAccount: RepoAccount = new RepoAccount()
     ) {}
 
     /**
@@ -73,7 +70,7 @@ export default class Account {
      * @returns {Promise<null | string>} JWT Token
      */
     public async getJwtToken(data: TypeAccount): Promise<null | string> {
-        const jwtToken: string = this.toolJwt.encode(data);
+        const jwtToken: string = ToolJwt.encode(data);
 
         // 設定白名單
         const key: string = `jwtToken-${jwtToken}`;
