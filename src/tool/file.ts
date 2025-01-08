@@ -12,7 +12,7 @@ export default class File {
      *
      * @returns {null | string} 檔案路徑
      */
-    public save(
+    public static save(
         path: string,
         fileInfo: TypeFile,
         isPublic: boolean = true
@@ -22,12 +22,12 @@ export default class File {
         const filePath: string = Path.join(fullPath, fileInfo.hashName);
 
         // 設定路徑
-        if (this.setPath(fullPath) === false) {
+        if (File.setPath(fullPath) === false) {
             return null;
         }
 
         // 移動檔案
-        if (this.move(fileInfo.path, filePath) === false) {
+        if (File.move(fileInfo.path, filePath) === false) {
             return null;
         }
 
@@ -41,7 +41,7 @@ export default class File {
      *
      * @returns {boolean} 是否成功
      */
-    private setPath(path: string): boolean {
+    private static setPath(path: string): boolean {
         // 檢查路徑是否存在
         if (FS.existsSync(path) === true) {
             return true;
@@ -66,7 +66,7 @@ export default class File {
      *
      * @returns {boolean} 是否成功
      */
-    private move(oldFilePath: string, filePath: string): boolean {
+    private static move(oldFilePath: string, filePath: string): boolean {
         try {
             FS.renameSync(oldFilePath, filePath);
         } catch (error: any) {

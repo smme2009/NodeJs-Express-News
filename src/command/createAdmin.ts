@@ -1,7 +1,6 @@
 import TypeAccount from "@/type/data/account";
 import { program, OptionValues } from "commander";
 import Env from "dotenv";
-import Database from "@/database/database";
 import Bcrypt from "bcrypt";
 import RepoAccount from "@/respository/account/account";
 import ModelAccount from "@/database/model/account";
@@ -9,9 +8,6 @@ import configRole from "@/config/role";
 
 // 初始化env
 Env.config();
-
-// 初始化資料庫
-Database.init();
 
 // 初始化Respository
 const repoAccount: RepoAccount = new RepoAccount();

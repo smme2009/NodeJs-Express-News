@@ -2,10 +2,13 @@ import { createClient, RedisClientType } from "redis";
 
 // Redis工具
 export default class Redis {
+    // Redis工具實體
+    private static instance: null | Redis = null;
+
     /**
-     * 建構子
+     * private建構子防止被外部new
      */
-    constructor(
+    private constructor(
         // Redis套件
         private redis: RedisClientType = createClient({
             url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
@@ -13,6 +16,28 @@ export default class Redis {
     ) {
         // 連線
         this.redis.connect();
+    }
+
+    /**
+     * 取得Redis工具實體
+     *
+     * @returns {Redis} Redis工具實體
+     */
+    public static getInstance(): Redis {
+        if (Redis.instance === null) {
+            Redis.instance = new Redis();
+        }
+
+        return Redis.instance;
+    }
+
+    /**
+     * 取得Redis套件，需要使用原生方法時使用
+     *
+     * @returns {RedisClientType} Redis套件
+     */
+    public getRedis(): RedisClientType {
+        return this.redis;
     }
 
     /**

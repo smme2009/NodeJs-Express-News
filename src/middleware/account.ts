@@ -11,18 +11,10 @@ export default class Account {
      * 建構子
      *
      * @param {number} roleId 角色ID
-     * @param {ToolJwt} toolJwt JWT工具
-     * @param {ToolRedis} toolRedis Redis工具
      */
     constructor(
         // 角色ID
-        private roleId: number,
-
-        // JWT工具
-        private toolJwt: ToolJwt = new ToolJwt(),
-
-        // Redis工具
-        private toolRedis: ToolRedis = new ToolRedis()
+        private roleId: number
     ) {}
 
     /**
@@ -53,7 +45,7 @@ export default class Account {
         const jwtToken: string = auth.replace("Bearer ", "");
 
         // 驗證Token是否存在於白名單
-        const hasKey: boolean = await this.toolRedis.hasKey(
+        const hasKey: boolean = await ToolRedis.getInstance().hasKey(
             `jwtToken-${jwtToken}`
         );
 
@@ -67,7 +59,7 @@ export default class Account {
         }
 
         // 驗證JWT Token
-        const data: null | JwtPayload = this.toolJwt.decode(jwtToken);
+        const data: null | JwtPayload = ToolJwt.decode(jwtToken);
 
         if (data === null) {
             const json: TypeJson = {

@@ -5,14 +5,30 @@ import Path from "path";
 // Database
 export default class Database {
     // Database實體
-    private static database: Sequelize;
+    private static instance: null | Sequelize = null;
+
+    // private建構子防止被外部new
+    private constructor() {}
 
     /**
-     * 初始化Database
+     * 取得Database實體
+     *
+     * @returns {Sequelize} Database實體
+     */
+    public static getInstance(): Sequelize {
+        if (Database.instance === null) {
+            Database.instance = Database.setInstance();
+        }
+
+        return Database.instance;
+    }
+
+    /**
+     * 設定Database實體
      *
      * @returns {void}
      */
-    public static init(): void {
+    private static setInstance(): Sequelize {
         // 使用cls-hooked讓sequelize可以自動傳遞transaction參數
         const namespace: Namespace = createNamespace("transaction");
         Sequelize.useCLS(namespace);
@@ -34,15 +50,6 @@ export default class Database {
         // 加入Model
         sequelize.addModels([modelPath]);
 
-        this.database = sequelize;
-    }
-
-    /**
-     * 取得Database實體
-     *
-     * @returns {Sequelize} Database實體
-     */
-    public static get(): Sequelize {
-        return this.database;
+        return sequelize;
     }
 }

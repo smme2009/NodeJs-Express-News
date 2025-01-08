@@ -13,13 +13,7 @@ export default class Account {
      */
     constructor(
         // 帳號Respository
-        private repoAccount: RepoAccount = new RepoAccount(),
-
-        // JWT工具
-        private toolJwt: ToolJwt = new ToolJwt(),
-
-        // Redis工具
-        private toolRedis: ToolRedis = new ToolRedis()
+        private repoAccount: RepoAccount = new RepoAccount()
     ) {}
 
     /**
@@ -76,13 +70,18 @@ export default class Account {
      * @returns {Promise<null | string>} JWT Token
      */
     public async getJwtToken(data: TypeAccount): Promise<null | string> {
-        const jwtToken: string = this.toolJwt.encode(data);
+        const jwtToken: string = ToolJwt.encode(data);
 
         // 設定白名單
         const key: string = `jwtToken-${jwtToken}`;
         const json: string = JSON.stringify(data);
         const limitTime: number = parseInt(process.env.JWT_LIMIT_DAY) * 86400;
-        const isSet: boolean = await this.toolRedis.set(key, json, limitTime);
+
+        const isSet: boolean = await ToolRedis.getInstance().set(
+            key,
+            json,
+            limitTime
+        );
 
         if (isSet === false) {
             return null;
@@ -119,7 +118,7 @@ export default class Account {
      * @returns {Promise<boolean>} 是否成功
      */
     public async logout(jwtToken: string): Promise<boolean> {
-        return await this.toolRedis.delete(`jwtToken-${jwtToken}`);
+        return await ToolRedis.getInstance().delete(`jwtToken-${jwtToken}`);
     }
 
     /**

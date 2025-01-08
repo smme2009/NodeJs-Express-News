@@ -11,10 +11,7 @@ export default class File {
      */
     constructor(
         // 檔案Respository
-        private repoFile: RepoFile = new RepoFile(),
-
-        // 檔案工具
-        private toolFile: ToolFile = new ToolFile()
+        private repoFile: RepoFile = new RepoFile()
     ) {}
 
     /**
@@ -60,7 +57,7 @@ export default class File {
      */
     public async save(data: TypeFile): Promise<null | TypeFile> {
         // 儲存檔案
-        const filePath: null | string = this.toolFile.save("news", data);
+        const filePath: null | string = ToolFile.save("news", data);
 
         if (filePath === null) {
             return null;

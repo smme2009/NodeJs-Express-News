@@ -9,7 +9,7 @@ export default class ToolJwt {
      *
      * @returns {string} JWT Token
      */
-    public encode(data: object): string {
+    public static encode(data: object): string {
         const payload: object = {
             iss: process.env.APP_URL, // 發行方
             aud: process.env.CORS_URL, // 使用
@@ -33,7 +33,7 @@ export default class ToolJwt {
      *
      * @returns {null | JwtPayload} 資料
      */
-    public decode(jwtToken: string): null | JwtPayload {
+    public static decode(jwtToken: string): null | JwtPayload {
         let data: null | JwtPayload = null;
 
         verify(
